@@ -1,0 +1,288 @@
+// Klib ABI Dump
+// Targets: [androidNativeArm32, androidNativeArm64, androidNativeX64, androidNativeX86, iosArm64, iosSimulatorArm64, iosX64, js, linuxArm64, linuxX64, macosArm64, macosX64, mingwX64, tvosArm64, tvosSimulatorArm64, tvosX64, wasmJs, wasmWasi, watchosArm32, watchosArm64, watchosDeviceArm64, watchosSimulatorArm64, watchosX64]
+// Alias: native => [androidNativeArm32, androidNativeArm64, androidNativeX64, androidNativeX86, iosArm64, iosSimulatorArm64, iosX64, linuxArm64, linuxX64, macosArm64, macosX64, mingwX64, tvosArm64, tvosSimulatorArm64, tvosX64, watchosArm32, watchosArm64, watchosDeviceArm64, watchosSimulatorArm64, watchosX64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.manriif.koncurrent:koncurrent>
+open annotation class koncurrent/InternalForInheritanceKoncurrentApi : kotlin/Annotation { // koncurrent/InternalForInheritanceKoncurrentApi|null[0]
+    constructor <init>() // koncurrent/InternalForInheritanceKoncurrentApi.<init>|<init>(){}[0]
+}
+
+abstract interface koncurrent.locks/Condition { // koncurrent.locks/Condition|null[0]
+    abstract fun await() // koncurrent.locks/Condition.await|await(){}[0]
+    abstract fun signal() // koncurrent.locks/Condition.signal|signal(){}[0]
+    abstract fun signalAll() // koncurrent.locks/Condition.signalAll|signalAll(){}[0]
+    open fun await(kotlin.time/Duration): kotlin/Boolean // koncurrent.locks/Condition.await|await(kotlin.time.Duration){}[0]
+}
+
+abstract interface koncurrent.locks/Lock { // koncurrent.locks/Lock|null[0]
+    abstract fun lock() // koncurrent.locks/Lock.lock|lock(){}[0]
+    abstract fun lockInterruptibly() // koncurrent.locks/Lock.lockInterruptibly|lockInterruptibly(){}[0]
+    abstract fun tryLock(): kotlin/Boolean // koncurrent.locks/Lock.tryLock|tryLock(){}[0]
+    abstract fun unlock() // koncurrent.locks/Lock.unlock|unlock(){}[0]
+    open fun tryLock(kotlin.time/Duration): kotlin/Boolean // koncurrent.locks/Lock.tryLock|tryLock(kotlin.time.Duration){}[0]
+}
+
+final class <#A: kotlin/Any, #B: kotlin/Any> koncurrent/ConcurrentHashMap : kotlin.collections/MutableMap<#A, #B> { // koncurrent/ConcurrentHashMap|null[0]
+    constructor <init>() // koncurrent/ConcurrentHashMap.<init>|<init>(){}[0]
+    constructor <init>(kotlin/Int) // koncurrent/ConcurrentHashMap.<init>|<init>(kotlin.Int){}[0]
+
+    final val entries // koncurrent/ConcurrentHashMap.entries|{}entries[0]
+        final fun <get-entries>(): kotlin.collections/MutableSet<kotlin.collections/MutableMap.MutableEntry<#A, #B>> // koncurrent/ConcurrentHashMap.entries.<get-entries>|<get-entries>(){}[0]
+    final val keys // koncurrent/ConcurrentHashMap.keys|{}keys[0]
+        final fun <get-keys>(): koncurrent/ConcurrentHashMap.KeySetView<#A, #B> // koncurrent/ConcurrentHashMap.keys.<get-keys>|<get-keys>(){}[0]
+    final val size // koncurrent/ConcurrentHashMap.size|{}size[0]
+        final fun <get-size>(): kotlin/Int // koncurrent/ConcurrentHashMap.size.<get-size>|<get-size>(){}[0]
+    final val values // koncurrent/ConcurrentHashMap.values|{}values[0]
+        final fun <get-values>(): kotlin.collections/MutableCollection<#B> // koncurrent/ConcurrentHashMap.values.<get-values>|<get-values>(){}[0]
+
+    final fun clear() // koncurrent/ConcurrentHashMap.clear|clear(){}[0]
+    final fun containsKey(#A): kotlin/Boolean // koncurrent/ConcurrentHashMap.containsKey|containsKey(1:0){}[0]
+    final fun containsValue(#B): kotlin/Boolean // koncurrent/ConcurrentHashMap.containsValue|containsValue(1:1){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // koncurrent/ConcurrentHashMap.equals|equals(kotlin.Any?){}[0]
+    final fun get(#A): #B? // koncurrent/ConcurrentHashMap.get|get(1:0){}[0]
+    final fun hashCode(): kotlin/Int // koncurrent/ConcurrentHashMap.hashCode|hashCode(){}[0]
+    final fun isEmpty(): kotlin/Boolean // koncurrent/ConcurrentHashMap.isEmpty|isEmpty(){}[0]
+    final fun put(#A, #B): #B? // koncurrent/ConcurrentHashMap.put|put(1:0;1:1){}[0]
+    final fun putAll(kotlin.collections/Map<out #A, #B>) // koncurrent/ConcurrentHashMap.putAll|putAll(kotlin.collections.Map<out|1:0,1:1>){}[0]
+    final fun putIfAbsent(#A, #B): #B? // koncurrent/ConcurrentHashMap.putIfAbsent|putIfAbsent(1:0;1:1){}[0]
+    final fun remove(#A): #B? // koncurrent/ConcurrentHashMap.remove|remove(1:0){}[0]
+    final fun remove(#A, #B): kotlin/Boolean // koncurrent/ConcurrentHashMap.remove|remove(1:0;1:1){}[0]
+    final fun replace(#A, #B): #B? // koncurrent/ConcurrentHashMap.replace|replace(1:0;1:1){}[0]
+    final fun replace(#A, #B, #B): kotlin/Boolean // koncurrent/ConcurrentHashMap.replace|replace(1:0;1:1;1:1){}[0]
+    final fun toString(): kotlin/String // koncurrent/ConcurrentHashMap.toString|toString(){}[0]
+
+    final class <#A1: kotlin/Any, #B1: kotlin/Any> KeySetView : kotlin.collections/MutableSet<#A1> { // koncurrent/ConcurrentHashMap.KeySetView|null[0]
+        final val size // koncurrent/ConcurrentHashMap.KeySetView.size|{}size[0]
+            final fun <get-size>(): kotlin/Int // koncurrent/ConcurrentHashMap.KeySetView.size.<get-size>|<get-size>(){}[0]
+
+        final fun add(#A1): kotlin/Boolean // koncurrent/ConcurrentHashMap.KeySetView.add|add(1:0){}[0]
+        final fun addAll(kotlin.collections/Collection<#A1>): kotlin/Boolean // koncurrent/ConcurrentHashMap.KeySetView.addAll|addAll(kotlin.collections.Collection<1:0>){}[0]
+        final fun clear() // koncurrent/ConcurrentHashMap.KeySetView.clear|clear(){}[0]
+        final fun contains(#A1): kotlin/Boolean // koncurrent/ConcurrentHashMap.KeySetView.contains|contains(1:0){}[0]
+        final fun containsAll(kotlin.collections/Collection<#A1>): kotlin/Boolean // koncurrent/ConcurrentHashMap.KeySetView.containsAll|containsAll(kotlin.collections.Collection<1:0>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // koncurrent/ConcurrentHashMap.KeySetView.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // koncurrent/ConcurrentHashMap.KeySetView.hashCode|hashCode(){}[0]
+        final fun isEmpty(): kotlin/Boolean // koncurrent/ConcurrentHashMap.KeySetView.isEmpty|isEmpty(){}[0]
+        final fun iterator(): kotlin.collections/MutableIterator<#A1> // koncurrent/ConcurrentHashMap.KeySetView.iterator|iterator(){}[0]
+        final fun remove(#A1): kotlin/Boolean // koncurrent/ConcurrentHashMap.KeySetView.remove|remove(1:0){}[0]
+        final fun removeAll(kotlin.collections/Collection<#A1>): kotlin/Boolean // koncurrent/ConcurrentHashMap.KeySetView.removeAll|removeAll(kotlin.collections.Collection<1:0>){}[0]
+        final fun retainAll(kotlin.collections/Collection<#A1>): kotlin/Boolean // koncurrent/ConcurrentHashMap.KeySetView.retainAll|retainAll(kotlin.collections.Collection<1:0>){}[0]
+        final fun toString(): kotlin/String // koncurrent/ConcurrentHashMap.KeySetView.toString|toString(){}[0]
+
+        // Targets: [js]
+        final fun asJsReadonlySetView(): kotlin.js.collections/JsReadonlySet<#A1> // koncurrent/ConcurrentHashMap.KeySetView.asJsReadonlySetView|asJsReadonlySetView(){}[0]
+
+        // Targets: [js]
+        final fun asJsSetView(): kotlin.js.collections/JsSet<#A1> // koncurrent/ConcurrentHashMap.KeySetView.asJsSetView|asJsSetView(){}[0]
+    }
+
+    // Targets: [js]
+    final fun asJsMapView(): kotlin.js.collections/JsMap<#A, #B> // koncurrent/ConcurrentHashMap.asJsMapView|asJsMapView(){}[0]
+
+    // Targets: [js]
+    final fun asJsReadonlyMapView(): kotlin.js.collections/JsReadonlyMap<#A, #B> // koncurrent/ConcurrentHashMap.asJsReadonlyMapView|asJsReadonlyMapView(){}[0]
+}
+
+final class <#A: kotlin/Any> koncurrent/ConcurrentHashSet : kotlin.collections/MutableSet<#A> { // koncurrent/ConcurrentHashSet|null[0]
+    constructor <init>() // koncurrent/ConcurrentHashSet.<init>|<init>(){}[0]
+    constructor <init>(kotlin/Int) // koncurrent/ConcurrentHashSet.<init>|<init>(kotlin.Int){}[0]
+
+    final val size // koncurrent/ConcurrentHashSet.size|{}size[0]
+        final fun <get-size>(): kotlin/Int // koncurrent/ConcurrentHashSet.size.<get-size>|<get-size>(){}[0]
+
+    final fun add(#A): kotlin/Boolean // koncurrent/ConcurrentHashSet.add|add(1:0){}[0]
+    final fun addAll(kotlin.collections/Collection<#A>): kotlin/Boolean // koncurrent/ConcurrentHashSet.addAll|addAll(kotlin.collections.Collection<1:0>){}[0]
+    final fun clear() // koncurrent/ConcurrentHashSet.clear|clear(){}[0]
+    final fun contains(#A): kotlin/Boolean // koncurrent/ConcurrentHashSet.contains|contains(1:0){}[0]
+    final fun containsAll(kotlin.collections/Collection<#A>): kotlin/Boolean // koncurrent/ConcurrentHashSet.containsAll|containsAll(kotlin.collections.Collection<1:0>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // koncurrent/ConcurrentHashSet.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // koncurrent/ConcurrentHashSet.hashCode|hashCode(){}[0]
+    final fun isEmpty(): kotlin/Boolean // koncurrent/ConcurrentHashSet.isEmpty|isEmpty(){}[0]
+    final fun iterator(): kotlin.collections/MutableIterator<#A> // koncurrent/ConcurrentHashSet.iterator|iterator(){}[0]
+    final fun remove(#A): kotlin/Boolean // koncurrent/ConcurrentHashSet.remove|remove(1:0){}[0]
+    final fun removeAll(kotlin.collections/Collection<#A>): kotlin/Boolean // koncurrent/ConcurrentHashSet.removeAll|removeAll(kotlin.collections.Collection<1:0>){}[0]
+    final fun retainAll(kotlin.collections/Collection<#A>): kotlin/Boolean // koncurrent/ConcurrentHashSet.retainAll|retainAll(kotlin.collections.Collection<1:0>){}[0]
+    final fun toString(): kotlin/String // koncurrent/ConcurrentHashSet.toString|toString(){}[0]
+
+    // Targets: [js]
+    final fun asJsReadonlySetView(): kotlin.js.collections/JsReadonlySet<#A> // koncurrent/ConcurrentHashSet.asJsReadonlySetView|asJsReadonlySetView(){}[0]
+
+    // Targets: [js]
+    final fun asJsSetView(): kotlin.js.collections/JsSet<#A> // koncurrent/ConcurrentHashSet.asJsSetView|asJsSetView(){}[0]
+}
+
+final class <#A: kotlin/Any?> koncurrent/CopyOnWriteArrayList : kotlin.collections/MutableList<#A> { // koncurrent/CopyOnWriteArrayList|null[0]
+    constructor <init>() // koncurrent/CopyOnWriteArrayList.<init>|<init>(){}[0]
+    constructor <init>(kotlin.collections/Collection<#A>) // koncurrent/CopyOnWriteArrayList.<init>|<init>(kotlin.collections.Collection<1:0>){}[0]
+
+    final val size // koncurrent/CopyOnWriteArrayList.size|{}size[0]
+        final fun <get-size>(): kotlin/Int // koncurrent/CopyOnWriteArrayList.size.<get-size>|<get-size>(){}[0]
+
+    final fun add(#A): kotlin/Boolean // koncurrent/CopyOnWriteArrayList.add|add(1:0){}[0]
+    final fun add(kotlin/Int, #A) // koncurrent/CopyOnWriteArrayList.add|add(kotlin.Int;1:0){}[0]
+    final fun addAll(kotlin.collections/Collection<#A>): kotlin/Boolean // koncurrent/CopyOnWriteArrayList.addAll|addAll(kotlin.collections.Collection<1:0>){}[0]
+    final fun addAll(kotlin/Int, kotlin.collections/Collection<#A>): kotlin/Boolean // koncurrent/CopyOnWriteArrayList.addAll|addAll(kotlin.Int;kotlin.collections.Collection<1:0>){}[0]
+    final fun addAllAbsent(kotlin.collections/Collection<#A>): kotlin/Int // koncurrent/CopyOnWriteArrayList.addAllAbsent|addAllAbsent(kotlin.collections.Collection<1:0>){}[0]
+    final fun addIfAbsent(#A): kotlin/Boolean // koncurrent/CopyOnWriteArrayList.addIfAbsent|addIfAbsent(1:0){}[0]
+    final fun clear() // koncurrent/CopyOnWriteArrayList.clear|clear(){}[0]
+    final fun contains(#A): kotlin/Boolean // koncurrent/CopyOnWriteArrayList.contains|contains(1:0){}[0]
+    final fun containsAll(kotlin.collections/Collection<#A>): kotlin/Boolean // koncurrent/CopyOnWriteArrayList.containsAll|containsAll(kotlin.collections.Collection<1:0>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // koncurrent/CopyOnWriteArrayList.equals|equals(kotlin.Any?){}[0]
+    final fun get(kotlin/Int): #A // koncurrent/CopyOnWriteArrayList.get|get(kotlin.Int){}[0]
+    final fun hashCode(): kotlin/Int // koncurrent/CopyOnWriteArrayList.hashCode|hashCode(){}[0]
+    final fun indexOf(#A): kotlin/Int // koncurrent/CopyOnWriteArrayList.indexOf|indexOf(1:0){}[0]
+    final fun isEmpty(): kotlin/Boolean // koncurrent/CopyOnWriteArrayList.isEmpty|isEmpty(){}[0]
+    final fun iterator(): kotlin.collections/MutableIterator<#A> // koncurrent/CopyOnWriteArrayList.iterator|iterator(){}[0]
+    final fun lastIndexOf(#A): kotlin/Int // koncurrent/CopyOnWriteArrayList.lastIndexOf|lastIndexOf(1:0){}[0]
+    final fun listIterator(): kotlin.collections/MutableListIterator<#A> // koncurrent/CopyOnWriteArrayList.listIterator|listIterator(){}[0]
+    final fun listIterator(kotlin/Int): kotlin.collections/MutableListIterator<#A> // koncurrent/CopyOnWriteArrayList.listIterator|listIterator(kotlin.Int){}[0]
+    final fun remove(#A): kotlin/Boolean // koncurrent/CopyOnWriteArrayList.remove|remove(1:0){}[0]
+    final fun removeAll(kotlin.collections/Collection<#A>): kotlin/Boolean // koncurrent/CopyOnWriteArrayList.removeAll|removeAll(kotlin.collections.Collection<1:0>){}[0]
+    final fun removeAt(kotlin/Int): #A // koncurrent/CopyOnWriteArrayList.removeAt|removeAt(kotlin.Int){}[0]
+    final fun retainAll(kotlin.collections/Collection<#A>): kotlin/Boolean // koncurrent/CopyOnWriteArrayList.retainAll|retainAll(kotlin.collections.Collection<1:0>){}[0]
+    final fun set(kotlin/Int, #A): #A // koncurrent/CopyOnWriteArrayList.set|set(kotlin.Int;1:0){}[0]
+    final fun subList(kotlin/Int, kotlin/Int): kotlin.collections/MutableList<#A> // koncurrent/CopyOnWriteArrayList.subList|subList(kotlin.Int;kotlin.Int){}[0]
+    final fun toString(): kotlin/String // koncurrent/CopyOnWriteArrayList.toString|toString(){}[0]
+
+    // Targets: [js]
+    final fun asJsArrayView(): kotlin.js.collections/JsArray<#A> // koncurrent/CopyOnWriteArrayList.asJsArrayView|asJsArrayView(){}[0]
+
+    // Targets: [js]
+    final fun asJsReadonlyArrayView(): kotlin.js.collections/JsReadonlyArray<#A> // koncurrent/CopyOnWriteArrayList.asJsReadonlyArrayView|asJsReadonlyArrayView(){}[0]
+}
+
+final class <#A: kotlin/Any?> koncurrent/ThreadLocal { // koncurrent/ThreadLocal|null[0]
+    constructor <init>() // koncurrent/ThreadLocal.<init>|<init>(){}[0]
+
+    final fun get(): #A? // koncurrent/ThreadLocal.get|get(){}[0]
+    final fun remove() // koncurrent/ThreadLocal.remove|remove(){}[0]
+    final fun set(#A) // koncurrent/ThreadLocal.set|set(1:0){}[0]
+}
+
+final class koncurrent.locks/IllegalMonitorStateException : kotlin/RuntimeException { // koncurrent.locks/IllegalMonitorStateException|null[0]
+    constructor <init>() // koncurrent.locks/IllegalMonitorStateException.<init>|<init>(){}[0]
+    constructor <init>(kotlin/String?) // koncurrent.locks/IllegalMonitorStateException.<init>|<init>(kotlin.String?){}[0]
+}
+
+final class koncurrent.locks/ReentrantLock : koncurrent.locks/Lock { // koncurrent.locks/ReentrantLock|null[0]
+    constructor <init>() // koncurrent.locks/ReentrantLock.<init>|<init>(){}[0]
+
+    final fun lock() // koncurrent.locks/ReentrantLock.lock|lock(){}[0]
+    final fun lockInterruptibly() // koncurrent.locks/ReentrantLock.lockInterruptibly|lockInterruptibly(){}[0]
+    final fun newCondition(): koncurrent.locks/Condition // koncurrent.locks/ReentrantLock.newCondition|newCondition(){}[0]
+    final fun tryLock(): kotlin/Boolean // koncurrent.locks/ReentrantLock.tryLock|tryLock(){}[0]
+    final fun unlock() // koncurrent.locks/ReentrantLock.unlock|unlock(){}[0]
+
+    // Targets: [native]
+    final fun tryLock(kotlin.time/Duration): kotlin/Boolean // koncurrent.locks/ReentrantLock.tryLock|tryLock(kotlin.time.Duration){}[0]
+}
+
+final class koncurrent.locks/ReentrantReadWriteLock { // koncurrent.locks/ReentrantReadWriteLock|null[0]
+    constructor <init>() // koncurrent.locks/ReentrantReadWriteLock.<init>|<init>(){}[0]
+
+    final fun getReadHoldCount(): kotlin/Int // koncurrent.locks/ReentrantReadWriteLock.getReadHoldCount|getReadHoldCount(){}[0]
+    final fun getWriteHoldCount(): kotlin/Int // koncurrent.locks/ReentrantReadWriteLock.getWriteHoldCount|getWriteHoldCount(){}[0]
+    final fun readLock(): koncurrent.locks/ReentrantReadWriteLock.ReadLock // koncurrent.locks/ReentrantReadWriteLock.readLock|readLock(){}[0]
+    final fun writeLock(): koncurrent.locks/ReentrantReadWriteLock.WriteLock // koncurrent.locks/ReentrantReadWriteLock.writeLock|writeLock(){}[0]
+
+    final class ReadLock : koncurrent.locks/Lock { // koncurrent.locks/ReentrantReadWriteLock.ReadLock|null[0]
+        final fun lock() // koncurrent.locks/ReentrantReadWriteLock.ReadLock.lock|lock(){}[0]
+        final fun lockInterruptibly() // koncurrent.locks/ReentrantReadWriteLock.ReadLock.lockInterruptibly|lockInterruptibly(){}[0]
+        final fun tryLock(): kotlin/Boolean // koncurrent.locks/ReentrantReadWriteLock.ReadLock.tryLock|tryLock(){}[0]
+        final fun unlock() // koncurrent.locks/ReentrantReadWriteLock.ReadLock.unlock|unlock(){}[0]
+
+        // Targets: [native]
+        final fun tryLock(kotlin.time/Duration): kotlin/Boolean // koncurrent.locks/ReentrantReadWriteLock.ReadLock.tryLock|tryLock(kotlin.time.Duration){}[0]
+    }
+
+    final class WriteLock : koncurrent.locks/Lock { // koncurrent.locks/ReentrantReadWriteLock.WriteLock|null[0]
+        final fun lock() // koncurrent.locks/ReentrantReadWriteLock.WriteLock.lock|lock(){}[0]
+        final fun lockInterruptibly() // koncurrent.locks/ReentrantReadWriteLock.WriteLock.lockInterruptibly|lockInterruptibly(){}[0]
+        final fun tryLock(): kotlin/Boolean // koncurrent.locks/ReentrantReadWriteLock.WriteLock.tryLock|tryLock(){}[0]
+        final fun unlock() // koncurrent.locks/ReentrantReadWriteLock.WriteLock.unlock|unlock(){}[0]
+
+        // Targets: [native]
+        final fun tryLock(kotlin.time/Duration): kotlin/Boolean // koncurrent.locks/ReentrantReadWriteLock.WriteLock.tryLock|tryLock(kotlin.time.Duration){}[0]
+    }
+}
+
+final class koncurrent/CountDownLatch { // koncurrent/CountDownLatch|null[0]
+    constructor <init>(kotlin/Int) // koncurrent/CountDownLatch.<init>|<init>(kotlin.Int){}[0]
+
+    final fun await() // koncurrent/CountDownLatch.await|await(){}[0]
+    final fun countDown() // koncurrent/CountDownLatch.countDown|countDown(){}[0]
+    final fun getCount(): kotlin/Long // koncurrent/CountDownLatch.getCount|getCount(){}[0]
+}
+
+final class koncurrent/InterruptedException : kotlin/Exception { // koncurrent/InterruptedException|null[0]
+    constructor <init>() // koncurrent/InterruptedException.<init>|<init>(){}[0]
+    constructor <init>(kotlin/String?) // koncurrent/InterruptedException.<init>|<init>(kotlin.String?){}[0]
+}
+
+final class koncurrent/Semaphore { // koncurrent/Semaphore|null[0]
+    constructor <init>(kotlin/Int) // koncurrent/Semaphore.<init>|<init>(kotlin.Int){}[0]
+
+    final fun acquire() // koncurrent/Semaphore.acquire|acquire(){}[0]
+    final fun availablePermits(): kotlin/Int // koncurrent/Semaphore.availablePermits|availablePermits(){}[0]
+    final fun release() // koncurrent/Semaphore.release|release(){}[0]
+    final fun tryAcquire(): kotlin/Boolean // koncurrent/Semaphore.tryAcquire|tryAcquire(){}[0]
+}
+
+final fun (koncurrent.locks/Condition).koncurrent.locks/await(kotlin.time/Duration): kotlin/Boolean // koncurrent.locks/await|await@koncurrent.locks.Condition(kotlin.time.Duration){}[0]
+final fun (koncurrent.locks/Lock).koncurrent.locks/tryLock(kotlin.time/Duration): kotlin/Boolean // koncurrent.locks/tryLock|tryLock@koncurrent.locks.Lock(kotlin.time.Duration){}[0]
+final fun (koncurrent/CountDownLatch).koncurrent/await(kotlin.time/Duration): kotlin/Boolean // koncurrent/await|await@koncurrent.CountDownLatch(kotlin.time.Duration){}[0]
+final fun (koncurrent/Semaphore).koncurrent/tryAcquire(kotlin.time/Duration): kotlin/Boolean // koncurrent/tryAcquire|tryAcquire@koncurrent.Semaphore(kotlin.time.Duration){}[0]
+final fun <#A: kotlin/Any, #B: kotlin/Any> (koncurrent/ConcurrentHashMap<#A, #B>).koncurrent/compute(#A, kotlin/Function2<#A, #B?, #B?>): #B? // koncurrent/compute|compute@koncurrent.ConcurrentHashMap<0:0,0:1>(0:0;kotlin.Function2<0:0,0:1?,0:1?>){0§<kotlin.Any>;1§<kotlin.Any>}[0]
+final fun <#A: kotlin/Any, #B: kotlin/Any> (koncurrent/ConcurrentHashMap<#A, #B>).koncurrent/computeIfAbsent(#A, kotlin/Function1<#A, #B>): #B // koncurrent/computeIfAbsent|computeIfAbsent@koncurrent.ConcurrentHashMap<0:0,0:1>(0:0;kotlin.Function1<0:0,0:1>){0§<kotlin.Any>;1§<kotlin.Any>}[0]
+final fun <#A: kotlin/Any, #B: kotlin/Any> (koncurrent/ConcurrentHashMap<#A, #B>).koncurrent/computeIfPresent(#A, kotlin/Function2<#A, #B, #B?>): #B? // koncurrent/computeIfPresent|computeIfPresent@koncurrent.ConcurrentHashMap<0:0,0:1>(0:0;kotlin.Function2<0:0,0:1,0:1?>){0§<kotlin.Any>;1§<kotlin.Any>}[0]
+final fun <#A: kotlin/Any, #B: kotlin/Any> (koncurrent/ConcurrentHashMap<#A, #B>).koncurrent/merge(#A, #B, kotlin/Function2<#B, #B, #B?>): #B? // koncurrent/merge|merge@koncurrent.ConcurrentHashMap<0:0,0:1>(0:0;0:1;kotlin.Function2<0:1,0:1,0:1?>){0§<kotlin.Any>;1§<kotlin.Any>}[0]
+final inline fun <#A: kotlin/Any> (koncurrent/ThreadLocal<#A>).koncurrent/getOrSet(kotlin/Function0<#A>): #A // koncurrent/getOrSet|getOrSet@koncurrent.ThreadLocal<0:0>(kotlin.Function0<0:0>){0§<kotlin.Any>}[0]
+final inline fun <#A: kotlin/Any?> (koncurrent.locks/Lock).koncurrent.locks/withLock(kotlin/Function0<#A>): #A // koncurrent.locks/withLock|withLock@koncurrent.locks.Lock(kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
+final inline fun <#A: kotlin/Any?> (koncurrent.locks/ReentrantReadWriteLock).koncurrent.locks/read(kotlin/Function0<#A>): #A // koncurrent.locks/read|read@koncurrent.locks.ReentrantReadWriteLock(kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
+final inline fun <#A: kotlin/Any?> (koncurrent.locks/ReentrantReadWriteLock).koncurrent.locks/write(kotlin/Function0<#A>): #A // koncurrent.locks/write|write@koncurrent.locks.ReentrantReadWriteLock(kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
+final inline fun <#A: kotlin/Any?> (koncurrent/Semaphore).koncurrent/withPermit(kotlin/Function0<#A>): #A // koncurrent/withPermit|withPermit@koncurrent.Semaphore(kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
+
+// Targets: [native]
+abstract fun interface koncurrent/Runnable { // koncurrent/Runnable|null[0]
+    abstract fun run() // koncurrent/Runnable.run|run(){}[0]
+}
+
+// Targets: [native]
+final class koncurrent/IllegalThreadStateException : kotlin/IllegalArgumentException { // koncurrent/IllegalThreadStateException|null[0]
+    constructor <init>() // koncurrent/IllegalThreadStateException.<init>|<init>(){}[0]
+    constructor <init>(kotlin/String?) // koncurrent/IllegalThreadStateException.<init>|<init>(kotlin.String?){}[0]
+}
+
+// Targets: [native]
+final class koncurrent/Thread { // koncurrent/Thread|null[0]
+    constructor <init>(koncurrent/Runnable) // koncurrent/Thread.<init>|<init>(koncurrent.Runnable){}[0]
+
+    final fun getName(): kotlin/String // koncurrent/Thread.getName|getName(){}[0]
+    final fun interrupt() // koncurrent/Thread.interrupt|interrupt(){}[0]
+    final fun isAlive(): kotlin/Boolean // koncurrent/Thread.isAlive|isAlive(){}[0]
+    final fun isDaemon(): kotlin/Boolean // koncurrent/Thread.isDaemon|isDaemon(){}[0]
+    final fun isInterrupted(): kotlin/Boolean // koncurrent/Thread.isInterrupted|isInterrupted(){}[0]
+    final fun join() // koncurrent/Thread.join|join(){}[0]
+    final fun setDaemon(kotlin/Boolean) // koncurrent/Thread.setDaemon|setDaemon(kotlin.Boolean){}[0]
+    final fun setName(kotlin/String) // koncurrent/Thread.setName|setName(kotlin.String){}[0]
+    final fun start() // koncurrent/Thread.start|start(){}[0]
+}
+
+// Targets: [native]
+final fun (koncurrent/Thread).koncurrent/join(kotlin.time/Duration): kotlin/Boolean // koncurrent/join|join@koncurrent.Thread(kotlin.time.Duration){}[0]
+
+// Targets: [native]
+final fun koncurrent/currentThread(): koncurrent/Thread // koncurrent/currentThread|currentThread(){}[0]
+
+// Targets: [native]
+final fun koncurrent/interrupted(): kotlin/Boolean // koncurrent/interrupted|interrupted(){}[0]
+
+// Targets: [native]
+final fun koncurrent/sleep(kotlin.time/Duration) // koncurrent/sleep|sleep(kotlin.time.Duration){}[0]
+
+// Targets: [native]
+final fun koncurrent/thread(kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/String? = ..., kotlin/Function0<kotlin/Unit>): koncurrent/Thread // koncurrent/thread|thread(kotlin.Boolean;kotlin.Boolean;kotlin.String?;kotlin.Function0<kotlin.Unit>){}[0]

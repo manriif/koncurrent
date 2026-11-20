@@ -1,0 +1,31 @@
+[versions]
+
+# Project version
+koncurrent = "0.0.1"
+
+# Android
+android-gradlePlugin = "9.3.0"
+android-sdk-compile = "36"
+android-sdk-min = "21"
+
+# Jvm toolchain
+jvm-toolchain = "17"
+jvm-toolchain-benchmark = "25"
+
+# Libs
+kotlin = "2.4.21"
+kotlinx-benchmark = "0.5.0"
+lincheck = "3.7"
+stately = "2.1.0"
+
+[plugins]
+
+android-multiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "android-gradlePlugin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinx-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kotlinx-benchmark" }
+
+[libraries]
+
+kotlinx-benchmarkRuntime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime", version.ref = "kotlinx-benchmark" }
+lincheck = { module = "org.jetbrains.lincheck:lincheck", version.ref = "lincheck" }
+stately-concurrentCollections = { module = "co.touchlab:stately-concurrent-collections", version.ref = "stately" }
