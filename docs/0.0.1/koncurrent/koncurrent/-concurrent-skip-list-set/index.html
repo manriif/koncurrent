@@ -1,0 +1,645 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>ConcurrentSkipListSet</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    Koncurrent
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.0.1
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":koncurrent/commonMain">common</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":koncurrent/javaMain">java</button>
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":koncurrent/nonJavaMain">nonJava</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":koncurrent/commonMain" data-filter=":koncurrent/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":koncurrent/javaMain" data-filter=":koncurrent/javaMain">
+                                <span class="checkbox--icon"></span>
+                                java
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":koncurrent/nonJavaMain" data-filter=":koncurrent/nonJavaMain">
+                                <span class="checkbox--icon"></span>
+                                nonJava
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    Koncurrent
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="Koncurrent::koncurrent/ConcurrentSkipListSet///PointingToDeclaration//-43889704">
+  <div class="breadcrumbs"><a href="../../index.html">Koncurrent</a><span class="delimiter">/</span><a href="../index.html">koncurrent</a><span class="delimiter">/</span><span class="current">ConcurrentSkipListSet</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Concurrent</span><wbr><span>Skip</span><wbr><span>List</span><wbr><span><span>Set</span></span></h1>
+    <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+      <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/javaMain" data-filterable-set=":koncurrent/javaMain" data-toggle=":koncurrent/javaMain">java</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">class </span><a href="index.html">ConcurrentSkipListSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span> : <a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt; </span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/commonMain/kotlin/koncurrent/ConcurrentSkipListSet.kt#L43">source</a>)</span></span></div><p class="paragraph">A <a href="../-navigable-set/index.html">NavigableSet</a> that several threads use at once, on a <a href="../-concurrent-skip-list-map/index.html">ConcurrentSkipListMap</a>.</p><p class="paragraph">It finds, adds and removes an element in a time that grows with the logarithm of its size. Its elements are in their natural order, or in the order of the <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-comparator/index.html">Comparator</a> that it is given.</p><p class="paragraph">Its iterators are weakly consistent. They never throw <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-concurrent-modification-exception/index.html">ConcurrentModificationException</a>, and they may or may not show the elements added or removed since they were created.</p><p class="paragraph">Elements cannot be <code class="lang-kotlin">null</code>.</p><h3 class="">Platforms</h3><ul><li><p class="paragraph">On the JVM and Android this is <code class="lang-kotlin">java.util.concurrent.ConcurrentSkipListSet</code>.</p></li><li><p class="paragraph">Elsewhere this is the sorted map of this library, with its elements as keys.</p></li></ul><h4 class="tableheader">Type Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>E</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the type of the elements</p></div></div></div></div></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/javaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">typealias </span><a href="index.html">ConcurrentSkipListSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span><span class="token operator"> = </span><a href="https://developer.android.com/reference/kotlin/java/util/concurrent/ConcurrentSkipListSet.html">java.util.concurrent.ConcurrentSkipListSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/javaMain/kotlin/koncurrent/ConcurrentSkipListSet.java.kt#L25">source</a>)</span></span></div><p class="paragraph">A <a href="../-navigable-set/index.html">NavigableSet</a> that several threads use at once, on a <a href="../-concurrent-skip-list-map/index.html">ConcurrentSkipListMap</a>.</p><p class="paragraph">It finds, adds and removes an element in a time that grows with the logarithm of its size. Its elements are in their natural order, or in the order of the <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-comparator/index.html">Comparator</a> that it is given.</p><p class="paragraph">Its iterators are weakly consistent. They never throw <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-concurrent-modification-exception/index.html">ConcurrentModificationException</a>, and they may or may not show the elements added or removed since they were created.</p><p class="paragraph">Elements cannot be <code class="lang-kotlin">null</code>.</p><h3 class="">Platforms</h3><ul><li><p class="paragraph">On the JVM and Android this is <code class="lang-kotlin">java.util.concurrent.ConcurrentSkipListSet</code>.</p></li><li><p class="paragraph">Elsewhere this is the sorted map of this library, with its elements as keys.</p></li></ul><h4 class="tableheader">Type Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":koncurrent/javaMain" data-filterable-set=":koncurrent/javaMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>E</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the type of the elements</p></div></div></div></div></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">class </span><a href="index.html">ConcurrentSkipListSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span> : <a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt; </span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/nonJavaMain/kotlin/koncurrent/ConcurrentSkipListSet.nonJava.kt#L28">source</a>)</span></span></div><p class="paragraph">A <a href="../-navigable-set/index.html">NavigableSet</a> that several threads use at once, on a <a href="../-concurrent-skip-list-map/index.html">ConcurrentSkipListMap</a>.</p><p class="paragraph">It finds, adds and removes an element in a time that grows with the logarithm of its size. Its elements are in their natural order, or in the order of the <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-comparator/index.html">Comparator</a> that it is given.</p><p class="paragraph">Its iterators are weakly consistent. They never throw <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-concurrent-modification-exception/index.html">ConcurrentModificationException</a>, and they may or may not show the elements added or removed since they were created.</p><p class="paragraph">Elements cannot be <code class="lang-kotlin">null</code>.</p><h3 class="">Platforms</h3><ul><li><p class="paragraph">On the JVM and Android this is <code class="lang-kotlin">java.util.concurrent.ConcurrentSkipListSet</code>.</p></li><li><p class="paragraph">Elsewhere this is the sorted map of this library, with its elements as keys.</p></li></ul><h4 class="tableheader">Type Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>E</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the type of the elements</p></div></div></div></div></div></div>    </div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="355218770%2FConstructors%2F1243847380" anchor-label="ConcurrentSkipListSet" id="355218770%2FConstructors%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-concurrent-skip-list-set.html"><span>Concurrent</span><wbr><span>Skip</span><wbr><span>List</span><wbr><span><span>Set</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="355218770%2FConstructors%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Creates an empty set in the natural order of its elements. An element that is not <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-comparable/index.html">Comparable</a> makes the set throw <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-class-cast-exception/index.html">ClassCastException</a>.</p></div><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">comparator<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-comparator/index.html">Comparator</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="index.html">E</a><span class="token operator">&gt;</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Creates an empty set in the order of <a href="../../../koncurrent/koncurrent/-concurrent-skip-list-set/--root--.html">comparator</a>, or in the natural order of its elements when it is <code class="lang-kotlin">null</code>.</p></div><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">elements<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Creates a set in the natural order of its elements that holds the given <a href="../../../koncurrent/koncurrent/-concurrent-skip-list-set/--root--.html">elements</a>.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Creates an empty set in the natural order of its elements. An element that is not <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-comparable/index.html">Comparable</a> makes the set throw <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-class-cast-exception/index.html">ClassCastException</a>.</p></div><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">comparator<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-comparator/index.html">Comparator</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="index.html">E</a><span class="token operator">&gt;</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Creates an empty set in the order of <a href="../../../koncurrent/koncurrent/-concurrent-skip-list-set/--root--.html">comparator</a>, or in the natural order of its elements when it is <code class="lang-kotlin">null</code>.</p></div><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">elements<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Creates a set in the natural order of its elements that holds the given <a href="../../../koncurrent/koncurrent/-concurrent-skip-list-set/--root--.html">elements</a>.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-132359657%2FProperties%2F1243847380" anchor-label="size" id="-132359657%2FProperties%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="size.html"><span><span>size</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-132359657%2FProperties%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="size.html">size</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../-navigable-set/index.html#1578037672%2FProperties%2F955760678">size</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="371839896%2FFunctions%2F1243847380" anchor-label="add" id="371839896%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add.html"><span><span>add</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="371839896%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/index.html#-153241610%2FFunctions%2F955760678"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="225072826%2FFunctions%2F1243847380" anchor-label="addAll" id="225072826%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-all.html"><span>add</span><wbr><span><span>All</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="225072826%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="add-all.html"><span class="token function">addAll</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">elements<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/index.html#-800009087%2FFunctions%2F955760678"><span class="token function">addAll</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">elements<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1097961111%2FFunctions%2F1243847380" anchor-label="ceiling" id="1097961111%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ceiling.html"><span><span>ceiling</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1097961111%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="ceiling.html"><span class="token function">ceiling</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns <a href="../-navigable-set/ceiling.html">element</a> if the set holds it, else the first element after it, or <code class="lang-kotlin">null</code> if there is none.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/ceiling.html"><span class="token function">ceiling</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns <a href="../-navigable-set/ceiling.html">element</a> if the set holds it, else the first element after it, or <code class="lang-kotlin">null</code> if there is none.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1656661793%2FFunctions%2F1243847380" anchor-label="clear" id="1656661793%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear.html"><span><span>clear</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1656661793%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="clear.html"><span class="token function">clear</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/index.html#-767459876%2FFunctions%2F955760678"><span class="token function">clear</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="42888229%2FFunctions%2F1243847380" anchor-label="comparator" id="42888229%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="comparator.html"><span><span>comparator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="42888229%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="comparator.html"><span class="token function">comparator</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-comparator/index.html">Comparator</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="index.html">E</a><span class="token operator">&gt;</span><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns the comparator that orders this set, or <code class="lang-kotlin">null</code> when it is in the natural order of its elements.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/comparator.html"><span class="token function">comparator</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-comparator/index.html">Comparator</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="index.html">E</a><span class="token operator">&gt;</span><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns the comparator that orders this set, or <code class="lang-kotlin">null</code> when it is in the natural order of its elements.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1223986122%2FFunctions%2F1243847380" anchor-label="contains" id="-1223986122%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="contains.html"><span><span>contains</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1223986122%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="contains.html"><span class="token function">contains</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="../-navigable-set/index.html#607101300%2FFunctions%2F955760678"><span class="token function">contains</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1366982248%2FFunctions%2F1243847380" anchor-label="containsAll" id="-1366982248%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="contains-all.html"><span>contains</span><wbr><span><span>All</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1366982248%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="contains-all.html"><span class="token function">containsAll</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">elements<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/index.html#1318510207%2FFunctions%2F955760678"><span class="token function">containsAll</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">elements<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1607552805%2FFunctions%2F1243847380" anchor-label="descendingIterator" id="1607552805%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="descending-iterator.html"><span>descending</span><wbr><span><span>Iterator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1607552805%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="descending-iterator.html"><span class="token function">descendingIterator</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-iterator/index.html">MutableIterator</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an iterator that goes from the last element to the first one.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/descending-iterator.html"><span class="token function">descendingIterator</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-iterator/index.html">MutableIterator</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an iterator that goes from the last element to the first one.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="366092771%2FFunctions%2F1243847380" anchor-label="descendingSet" id="366092771%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="descending-set.html"><span>descending</span><wbr><span><span>Set</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="366092771%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="descending-set.html"><span class="token function">descendingSet</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a view of this set in the reverse order.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/descending-set.html"><span class="token function">descendingSet</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a view of this set in the reverse order.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2092664421%2FFunctions%2F955760678" anchor-label="equals" id="2092664421%2FFunctions%2F955760678" data-filterable-set=":koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="equals.html"><span><span>equals</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2092664421%2FFunctions%2F955760678"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-active="" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="equals.html"><span class="token function">equals</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1365945961%2FFunctions%2F1243847380" anchor-label="first" id="-1365945961%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="first.html"><span><span>first</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1365945961%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="first.html"><span class="token function">first</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a></div><div class="brief "><p class="paragraph">Returns the first element.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/first.html"><span class="token function">first</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a></div><div class="brief "><p class="paragraph">Returns the first element.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2096980537%2FFunctions%2F1243847380" anchor-label="floor" id="2096980537%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="floor.html"><span><span>floor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2096980537%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="floor.html"><span class="token function">floor</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns <a href="../-navigable-set/floor.html">element</a> if the set holds it, else the last element before it, or <code class="lang-kotlin">null</code> if there is none.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/floor.html"><span class="token function">floor</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns <a href="../-navigable-set/floor.html">element</a> if the set holds it, else the last element before it, or <code class="lang-kotlin">null</code> if there is none.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2048529183%2FFunctions%2F955760678" anchor-label="hashCode" id="-2048529183%2FFunctions%2F955760678" data-filterable-set=":koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hash-code.html"><span>hash</span><wbr><span><span>Code</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2048529183%2FFunctions%2F955760678"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-active="" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="hash-code.html"><span class="token function">hashCode</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1079868646%2FFunctions%2F1243847380" anchor-label="headSet" id="1079868646%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="head-set.html"><span>head</span><wbr><span><span>Set</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1079868646%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">fun </span><a href="head-set.html"><span class="token function">headSet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">toElement<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a view of the elements before <a href="head-set.html">toElement</a>.</p></div><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="head-set.html"><span class="token function">headSet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">toElement<span class="token operator">: </span><a href="index.html">E</a><span class="token punctuation">, </span></span><span class="parameter ">inclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a view of the elements before <a href="../-navigable-set/head-set.html">toElement</a>, and of that one when <a href="../-navigable-set/head-set.html">inclusive</a>.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="head-set.html"><span class="token function">headSet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">toElement<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a view of the elements before <a href="head-set.html">toElement</a>.</p></div><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/head-set.html"><span class="token function">headSet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">toElement<span class="token operator">: </span><a href="index.html">E</a><span class="token punctuation">, </span></span><span class="parameter ">inclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a view of the elements before <a href="../-navigable-set/head-set.html">toElement</a>, and of that one when <a href="../-navigable-set/head-set.html">inclusive</a>.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="169620709%2FFunctions%2F1243847380" anchor-label="higher" id="169620709%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="higher.html"><span><span>higher</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="169620709%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="higher.html"><span class="token function">higher</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns the first element after <a href="../-navigable-set/higher.html">element</a>, or <code class="lang-kotlin">null</code> if there is none.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/higher.html"><span class="token function">higher</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns the first element after <a href="../-navigable-set/higher.html">element</a>, or <code class="lang-kotlin">null</code> if there is none.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="755434207%2FFunctions%2F1243847380" anchor-label="isEmpty" id="755434207%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-empty.html"><span>is</span><wbr><span><span>Empty</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="755434207%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="is-empty.html"><span class="token function">isEmpty</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/index.html#-477621106%2FFunctions%2F955760678"><span class="token function">isEmpty</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="58254753%2FFunctions%2F1243847380" anchor-label="iterator" id="58254753%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="iterator.html"><span><span>iterator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="58254753%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="iterator.html"><span class="token function">iterator</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-iterator/index.html">MutableIterator</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="../-navigable-set/index.html#1565777859%2FFunctions%2F955760678"><span class="token function">iterator</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-iterator/index.html">MutableIterator</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="424275813%2FFunctions%2F1243847380" anchor-label="last" id="424275813%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="last.html"><span><span>last</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="424275813%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="last.html"><span class="token function">last</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a></div><div class="brief "><p class="paragraph">Returns the last element.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/last.html"><span class="token function">last</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a></div><div class="brief "><p class="paragraph">Returns the last element.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1365109455%2FFunctions%2F1243847380" anchor-label="lower" id="1365109455%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="lower.html"><span><span>lower</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1365109455%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="lower.html"><span class="token function">lower</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns the last element before <a href="../-navigable-set/lower.html">element</a>, or <code class="lang-kotlin">null</code> if there is none.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/lower.html"><span class="token function">lower</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns the last element before <a href="../-navigable-set/lower.html">element</a>, or <code class="lang-kotlin">null</code> if there is none.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1548887339%2FFunctions%2F1243847380" anchor-label="pollFirst" id="-1548887339%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="poll-first.html"><span>poll</span><wbr><span><span>First</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1548887339%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="poll-first.html"><span class="token function">pollFirst</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Removes the first element and returns it, or returns <code class="lang-kotlin">null</code> if the set is empty.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/poll-first.html"><span class="token function">pollFirst</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Removes the first element and returns it, or returns <code class="lang-kotlin">null</code> if the set is empty.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1293939525%2FFunctions%2F1243847380" anchor-label="pollLast" id="1293939525%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="poll-last.html"><span>poll</span><wbr><span><span>Last</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1293939525%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="poll-last.html"><span class="token function">pollLast</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Removes the last element and returns it, or returns <code class="lang-kotlin">null</code> if the set is empty.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/poll-last.html"><span class="token function">pollLast</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">E</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Removes the last element and returns it, or returns <code class="lang-kotlin">null</code> if the set is empty.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1927172074%2FFunctions%2F1243847380" anchor-label="remove" id="1927172074%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remove.html"><span><span>remove</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1927172074%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="remove.html"><span class="token function">remove</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/index.html#-1503494415%2FFunctions%2F955760678"><span class="token function">remove</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="159100478%2FFunctions%2F1243847380" anchor-label="removeAll" id="159100478%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remove-all.html"><span>remove</span><wbr><span><span>All</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="159100478%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="remove-all.html"><span class="token function">removeAll</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">elements<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/index.html#430447804%2FFunctions%2F955760678"><span class="token function">removeAll</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">elements<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1069477346%2FFunctions%2F1243847380" anchor-label="retainAll" id="-1069477346%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="retain-all.html"><span>retain</span><wbr><span><span>All</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1069477346%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="retain-all.html"><span class="token function">retainAll</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">elements<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/index.html#991165949%2FFunctions%2F955760678"><span class="token function">retainAll</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">elements<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="698436940%2FFunctions%2F1243847380" anchor-label="subSet" id="698436940%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="sub-set.html"><span>sub</span><wbr><span><span>Set</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="698436940%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">fun </span><a href="sub-set.html"><span class="token function">subSet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fromElement<span class="token operator">: </span><a href="index.html">E</a><span class="token punctuation">, </span></span><span class="parameter ">toElement<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a view of the elements from <a href="sub-set.html">fromElement</a> to just before <a href="sub-set.html">toElement</a>.</p></div><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="sub-set.html"><span class="token function">subSet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fromElement<span class="token operator">: </span><a href="index.html">E</a><span class="token punctuation">, </span></span><span class="parameter ">fromInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">toElement<span class="token operator">: </span><a href="index.html">E</a><span class="token punctuation">, </span></span><span class="parameter ">toInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a view of the elements from <a href="../-navigable-set/sub-set.html">fromElement</a> to <a href="../-navigable-set/sub-set.html">toElement</a>. Each flag tells whether the view holds an element that equals its bound.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="sub-set.html"><span class="token function">subSet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fromElement<span class="token operator">: </span><a href="index.html">E</a><span class="token punctuation">, </span></span><span class="parameter ">toElement<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a view of the elements from <a href="sub-set.html">fromElement</a> to just before <a href="sub-set.html">toElement</a>.</p></div><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/sub-set.html"><span class="token function">subSet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fromElement<span class="token operator">: </span><a href="index.html">E</a><span class="token punctuation">, </span></span><span class="parameter ">fromInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">toElement<span class="token operator">: </span><a href="index.html">E</a><span class="token punctuation">, </span></span><span class="parameter ">toInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a view of the elements from <a href="../-navigable-set/sub-set.html">fromElement</a> to <a href="../-navigable-set/sub-set.html">toElement</a>. Each flag tells whether the view holds an element that equals its bound.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1236812694%2FFunctions%2F1243847380" anchor-label="tailSet" id="1236812694%2FFunctions%2F1243847380" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nonJavaMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="tail-set.html"><span>tail</span><wbr><span><span>Set</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1236812694%2FFunctions%2F1243847380"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">fun </span><a href="tail-set.html"><span class="token function">tailSet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fromElement<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a view of the elements that are <a href="tail-set.html">fromElement</a> or after it.</p></div><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="tail-set.html"><span class="token function">tailSet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fromElement<span class="token operator">: </span><a href="index.html">E</a><span class="token punctuation">, </span></span><span class="parameter ">inclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a view of the elements after <a href="../-navigable-set/tail-set.html">fromElement</a>, and of that one when <a href="../-navigable-set/tail-set.html">inclusive</a>.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="tail-set.html"><span class="token function">tailSet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fromElement<span class="token operator">: </span><a href="index.html">E</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a view of the elements that are <a href="tail-set.html">fromElement</a> or after it.</p></div><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-navigable-set/tail-set.html"><span class="token function">tailSet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fromElement<span class="token operator">: </span><a href="index.html">E</a><span class="token punctuation">, </span></span><span class="parameter ">inclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-navigable-set/index.html">NavigableSet</a><span class="token operator">&lt;</span><a href="index.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a view of the elements after <a href="../-navigable-set/tail-set.html">fromElement</a>, and of that one when <a href="../-navigable-set/tail-set.html">inclusive</a>.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2068272048%2FFunctions%2F955760678" anchor-label="toString" id="2068272048%2FFunctions%2F955760678" data-filterable-set=":koncurrent/nonJavaMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-string.html"><span>to</span><wbr><span><span>String</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2068272048%2FFunctions%2F955760678"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/nonJavaMain" data-filterable-set=":koncurrent/nonJavaMain" data-active="" data-toggle=":koncurrent/nonJavaMain">nonJava</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/nonJavaMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="to-string.html"><span class="token function">toString</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Maanrifa Bacar Ali</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:koncurrent/ConcurrentHashMap.KeySetView/equals/#kotlin.Any?/PointingToDeclaration/Koncurrent/koncurrent/-concurrent-hash-map/-key-set-view/[non-java]equals.html
+$dokka.location:koncurrent/ConcurrentHashMap.KeySetView/hashCode/#/PointingToDeclaration/Koncurrent/koncurrent/-concurrent-hash-map/-key-set-view/[non-java]hash-code.html
+$dokka.location:koncurrent/ConcurrentHashMap.KeySetView/toString/#/PointingToDeclaration/Koncurrent/koncurrent/-concurrent-hash-map/-key-set-view/[non-java]to-string.html
+$dokka.location:koncurrent/ConcurrentHashMap/equals/#kotlin.Any?/PointingToDeclaration/Koncurrent/koncurrent/-concurrent-hash-map/[non-java]equals.html
+$dokka.location:koncurrent/ConcurrentHashMap/hashCode/#/PointingToDeclaration/Koncurrent/koncurrent/-concurrent-hash-map/[non-java]hash-code.html
+$dokka.location:koncurrent/ConcurrentHashMap/toString/#/PointingToDeclaration/Koncurrent/koncurrent/-concurrent-hash-map/[non-java]to-string.html
+module:Koncurrent
+koncurrent
+koncurrent.locks

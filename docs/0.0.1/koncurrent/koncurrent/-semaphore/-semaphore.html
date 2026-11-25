@@ -1,0 +1,135 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Semaphore</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    Koncurrent
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.0.1
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":koncurrent/commonMain">common</button>
+                <button class="platform-tag platform-selector native-like" data-active="" aria-pressed="true" data-filter=":koncurrent/nativeMain">native</button>
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":koncurrent/nonConcurrentMain">nonConcurrent</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":koncurrent/commonMain" data-filter=":koncurrent/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option native-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":koncurrent/nativeMain" data-filter=":koncurrent/nativeMain">
+                                <span class="checkbox--icon"></span>
+                                native
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":koncurrent/nonConcurrentMain" data-filter=":koncurrent/nonConcurrentMain">
+                                <span class="checkbox--icon"></span>
+                                nonConcurrent
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    Koncurrent
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="member" id="content" pageids="Koncurrent::koncurrent/Semaphore/Semaphore/#kotlin.Int/PointingToDeclaration//-1999498816">
+  <div class="breadcrumbs"><a href="../../index.html">Koncurrent</a><span class="delimiter">/</span><a href="../index.html">koncurrent</a><span class="delimiter">/</span><a href="index.html">Semaphore</a><span class="delimiter">/</span><span class="current">Semaphore</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Semaphore</span></span></h1>
+  </div>
+  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/nonConcurrentMain" data-toggle=":koncurrent/nonConcurrentMain">nonConcurrent</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">permits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/commonMain/kotlin/koncurrent/Semaphore.kt#L55">source</a>)</span></span></div><h4 class="tableheader">Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>permits</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the number of permits at the start. It may be negative, in which case releases must come before any permit can be acquired.</p></div></div></div></div></div><hr><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">permits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">fair<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/commonMain/kotlin/koncurrent/Semaphore.kt#L57">source</a>)</span></span></div><p class="paragraph">Creates a semaphore of <a href="../../../koncurrent/koncurrent/-semaphore/--root--.html">permits</a> permits that is <a href="../../../koncurrent/koncurrent/-semaphore/--root--.html">fair</a> or not.</p></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">permits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/nativeMain/kotlin/koncurrent/Semaphore.native.kt#L30">source</a>)</span></span></div><p class="paragraph">A count of permits that threads take and give back. It limits how many threads use a resource at once, like the connections of a pool.</p><p class="paragraph"><a href="acquire.html">acquire</a> takes a permit, and waits while there is none. <a href="release.html">release</a> gives one back, and wakes up a waiting thread. Prefer <a href="../../../koncurrent/koncurrent/index.html">withPermit</a>, which never forgets to release.</p><p class="paragraph">A permit does not belong to a thread. Any thread can release, whether it acquired or not. So a semaphore also serves as a signal between threads: one waits in <a href="acquire.html">acquire</a> until another calls <a href="release.html">release</a>.</p><p class="paragraph">The semaphore is not fair unless it is created so. A thread that asks for a permit then takes one if there is any, even when other threads wait. The permits of a fair semaphore go to the threads in the order of their arrival.</p><h3 class="">Platforms</h3><ul><li><p class="paragraph">On the JVM and Android this is <code class="lang-kotlin">java.util.concurrent.Semaphore</code>.</p></li><li><p class="paragraph">On native this is a port of the <code class="lang-kotlin">Semaphore</code> of JSR-166.</p></li><li><p class="paragraph">JS and Wasm have one thread. An <a href="acquire.html">acquire</a> without a permit could never end, so it throws <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-illegal-state-exception/index.html">IllegalStateException</a> there.</p></li></ul><h4 class="tableheader">Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>permits</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the number of permits at the start. It may be negative, in which case releases must come before any permit can be acquired.</p></div></div></div></div></div><hr><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">permits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">fair<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/nativeMain/kotlin/koncurrent/Semaphore.native.kt#L26">source</a>)</span></span></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonConcurrentMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">permits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/nonConcurrentMain/kotlin/koncurrent/Semaphore.nonConcurrent.kt#L32">source</a>)</span></span></div><p class="paragraph">A count of permits that threads take and give back. It limits how many threads use a resource at once, like the connections of a pool.</p><p class="paragraph"><a href="acquire.html">acquire</a> takes a permit, and waits while there is none. <a href="release.html">release</a> gives one back, and wakes up a waiting thread. Prefer <a href="../with-permit.html">withPermit</a>, which never forgets to release.</p><p class="paragraph">A permit does not belong to a thread. Any thread can release, whether it acquired or not. So a semaphore also serves as a signal between threads: one waits in <a href="acquire.html">acquire</a> until another calls <a href="release.html">release</a>.</p><p class="paragraph">The semaphore is not fair unless it is created so. A thread that asks for a permit then takes one if there is any, even when other threads wait. The permits of a fair semaphore go to the threads in the order of their arrival.</p><h3 class="">Platforms</h3><ul><li><p class="paragraph">On the JVM and Android this is <code class="lang-kotlin">java.util.concurrent.Semaphore</code>.</p></li><li><p class="paragraph">On native this is a port of the <code class="lang-kotlin">Semaphore</code> of JSR-166.</p></li><li><p class="paragraph">JS and Wasm have one thread. An <a href="acquire.html">acquire</a> without a permit could never end, so it throws <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-illegal-state-exception/index.html">IllegalStateException</a> there.</p></li></ul><h4 class="tableheader">Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/nonConcurrentMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>permits</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the number of permits at the start. It may be negative, in which case releases must come before any permit can be acquired.</p></div></div></div></div></div><hr><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">permits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">fair<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/nonConcurrentMain/kotlin/koncurrent/Semaphore.nonConcurrent.kt#L27">source</a>)</span></span></div></div>  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Maanrifa Bacar Ali</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>ReentrantLock</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    Koncurrent
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.0.1
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":koncurrent/commonMain">common</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":koncurrent/javaMain">java</button>
+                <button class="platform-tag platform-selector native-like" data-active="" aria-pressed="true" data-filter=":koncurrent/nativeMain">native</button>
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":koncurrent/nonConcurrentMain">nonConcurrent</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":koncurrent/commonMain" data-filter=":koncurrent/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":koncurrent/javaMain" data-filter=":koncurrent/javaMain">
+                                <span class="checkbox--icon"></span>
+                                java
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option native-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":koncurrent/nativeMain" data-filter=":koncurrent/nativeMain">
+                                <span class="checkbox--icon"></span>
+                                native
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":koncurrent/nonConcurrentMain" data-filter=":koncurrent/nonConcurrentMain">
+                                <span class="checkbox--icon"></span>
+                                nonConcurrent
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    Koncurrent
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="Koncurrent::koncurrent.locks/ReentrantLock///PointingToDeclaration//237261252">
+  <div class="breadcrumbs"><a href="../../index.html">Koncurrent</a><span class="delimiter">/</span><a href="../index.html">koncurrent.locks</a><span class="delimiter">/</span><span class="current">ReentrantLock</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Reentrant</span><wbr><span><span>Lock</span></span></h1>
+    <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+      <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/javaMain" data-filterable-set=":koncurrent/javaMain" data-toggle=":koncurrent/javaMain">java</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/nonConcurrentMain" data-toggle=":koncurrent/nonConcurrentMain">nonConcurrent</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">class </span><a href="index.html">ReentrantLock</a> : <a href="../-lock/index.html">Lock</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/commonMain/kotlin/koncurrent/locks/ReentrantLock.kt#L47">source</a>)</span></span></div><p class="paragraph">A mutual exclusion lock that the thread holding it can take again.</p><p class="paragraph">Only one thread holds the lock at a time. That thread can call <a href="lock.html">lock</a> again without waiting. It must then call <a href="unlock.html">unlock</a> once for each <a href="lock.html">lock</a>. Prefer <a href="../with-lock.html">withLock</a>, which never forgets to unlock.</p><p class="paragraph">The lock is not fair unless it is created so. A thread that asks for a free lock then takes it, even when other threads wait for it. A fair lock goes to the thread that has waited for the longest. No thread waits forever for it, and it is much slower when many threads take it, since every release wakes a thread up.</p><p class="paragraph">The lock holds no native resource. It has nothing to close, and it is freed as any object.</p><h3 class="">Platforms</h3><ul><li><p class="paragraph">On the JVM and Android this is <code class="lang-kotlin">java.util.concurrent.locks.ReentrantLock</code>.</p></li><li><p class="paragraph">On native this is a port of the <code class="lang-kotlin">ReentrantLock</code> of JSR-166. A thread that waits sleeps until the lock is released.</p></li><li><p class="paragraph">JS and Wasm have one thread, which never waits. The lock only counts its holds there.</p></li></ul></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/javaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">typealias </span><a href="index.html">ReentrantLock</a><span class="token operator"> = </span><a href="https://developer.android.com/reference/kotlin/java/util/concurrent/locks/ReentrantLock.html">java.util.concurrent.locks.ReentrantLock</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/javaMain/kotlin/koncurrent/locks/ReentrantLock.java.kt#L24">source</a>)</span></span></div><p class="paragraph">A mutual exclusion lock that the thread holding it can take again.</p><p class="paragraph">Only one thread holds the lock at a time. That thread can call <a href="../../../koncurrent/koncurrent.locks/-reentrant-lock/lock.html">lock</a> again without waiting. It must then call <a href="../../../koncurrent/koncurrent.locks/-reentrant-lock/unlock.html">unlock</a> once for each <a href="../../../koncurrent/koncurrent.locks/-reentrant-lock/lock.html">lock</a>. Prefer <a href="../../../koncurrent/koncurrent.locks/index.html">withLock</a>, which never forgets to unlock.</p><p class="paragraph">The lock is not fair unless it is created so. A thread that asks for a free lock then takes it, even when other threads wait for it. A fair lock goes to the thread that has waited for the longest. No thread waits forever for it, and it is much slower when many threads take it, since every release wakes a thread up.</p><p class="paragraph">The lock holds no native resource. It has nothing to close, and it is freed as any object.</p><h3 class="">Platforms</h3><ul><li><p class="paragraph">On the JVM and Android this is <code class="lang-kotlin">java.util.concurrent.locks.ReentrantLock</code>.</p></li><li><p class="paragraph">On native this is a port of the <code class="lang-kotlin">ReentrantLock</code> of JSR-166. A thread that waits sleeps until the lock is released.</p></li><li><p class="paragraph">JS and Wasm have one thread, which never waits. The lock only counts its holds there.</p></li></ul></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">class </span><a href="index.html">ReentrantLock</a> : <a href="../-lock/index.html">Lock</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/nativeMain/kotlin/koncurrent/locks/ReentrantLock.native.kt#L29">source</a>)</span></span></div><p class="paragraph">A mutual exclusion lock that the thread holding it can take again.</p><p class="paragraph">Only one thread holds the lock at a time. That thread can call <a href="lock.html">lock</a> again without waiting. It must then call <a href="unlock.html">unlock</a> once for each <a href="lock.html">lock</a>. Prefer <a href="../../../koncurrent/koncurrent.locks/index.html">withLock</a>, which never forgets to unlock.</p><p class="paragraph">The lock is not fair unless it is created so. A thread that asks for a free lock then takes it, even when other threads wait for it. A fair lock goes to the thread that has waited for the longest. No thread waits forever for it, and it is much slower when many threads take it, since every release wakes a thread up.</p><p class="paragraph">The lock holds no native resource. It has nothing to close, and it is freed as any object.</p><h3 class="">Platforms</h3><ul><li><p class="paragraph">On the JVM and Android this is <code class="lang-kotlin">java.util.concurrent.locks.ReentrantLock</code>.</p></li><li><p class="paragraph">On native this is a port of the <code class="lang-kotlin">ReentrantLock</code> of JSR-166. A thread that waits sleeps until the lock is released.</p></li><li><p class="paragraph">JS and Wasm have one thread, which never waits. The lock only counts its holds there.</p></li></ul></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonConcurrentMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">class </span><a href="index.html">ReentrantLock</a> : <a href="../-lock/index.html">Lock</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/nonConcurrentMain/kotlin/koncurrent/locks/ReentrantLock.nonConcurrent.kt#L29">source</a>)</span></span></div><p class="paragraph">A mutual exclusion lock that the thread holding it can take again.</p><p class="paragraph">Only one thread holds the lock at a time. That thread can call <a href="lock.html">lock</a> again without waiting. It must then call <a href="unlock.html">unlock</a> once for each <a href="lock.html">lock</a>. Prefer <a href="../with-lock.html">withLock</a>, which never forgets to unlock.</p><p class="paragraph">The lock is not fair unless it is created so. A thread that asks for a free lock then takes it, even when other threads wait for it. A fair lock goes to the thread that has waited for the longest. No thread waits forever for it, and it is much slower when many threads take it, since every release wakes a thread up.</p><p class="paragraph">The lock holds no native resource. It has nothing to close, and it is freed as any object.</p><h3 class="">Platforms</h3><ul><li><p class="paragraph">On the JVM and Android this is <code class="lang-kotlin">java.util.concurrent.locks.ReentrantLock</code>.</p></li><li><p class="paragraph">On native this is a port of the <code class="lang-kotlin">ReentrantLock</code> of JSR-166. A thread that waits sleeps until the lock is released.</p></li><li><p class="paragraph">JS and Wasm have one thread, which never waits. The lock only counts its holds there.</p></li></ul></div>    </div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="1096360721%2FConstructors%2F-1999498816" anchor-label="ReentrantLock" id="1096360721%2FConstructors%2F-1999498816" data-filterable-set=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-reentrant-lock.html"><span>Reentrant</span><wbr><span><span>Lock</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1096360721%2FConstructors%2F-1999498816"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/nonConcurrentMain" data-toggle=":koncurrent/nonConcurrentMain">nonConcurrent</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fair<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Creates a lock that is <a href="../../../koncurrent/koncurrent.locks/-reentrant-lock/--root--.html">fair</a> or not.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A mutual exclusion lock that the thread holding it can take again.</p></div><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fair<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonConcurrentMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A mutual exclusion lock that the thread holding it can take again.</p></div><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fair<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="1342079954%2FFunctions%2F-1999498816" anchor-label="isFair" id="1342079954%2FFunctions%2F-1999498816" data-filterable-set=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-fair.html"><span>is</span><wbr><span><span>Fair</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1342079954%2FFunctions%2F-1999498816"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/nonConcurrentMain" data-toggle=":koncurrent/nonConcurrentMain">nonConcurrent</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">fun </span><a href="is-fair.html"><span class="token function">isFair</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Tells whether this lock is fair.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="is-fair.html"><span class="token function">isFair</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Tells whether this lock is fair.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonConcurrentMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="is-fair.html"><span class="token function">isFair</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Tells whether this lock is fair.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="130549109%2FFunctions%2F-1999498816" anchor-label="lock" id="130549109%2FFunctions%2F-1999498816" data-filterable-set=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="lock.html"><span><span>lock</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="130549109%2FFunctions%2F-1999498816"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/nonConcurrentMain" data-toggle=":koncurrent/nonConcurrentMain">nonConcurrent</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="lock.html"><span class="token function">lock</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Acquires the lock, and waits while another thread holds it. An interrupt does not end the wait.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="lock.html"><span class="token function">lock</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Acquires the lock, and waits while it cannot be acquired. An interrupt does not end the wait.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonConcurrentMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="lock.html"><span class="token function">lock</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Acquires the lock, and waits while it cannot be acquired. An interrupt does not end the wait.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-644280324%2FFunctions%2F-1999498816" anchor-label="lockInterruptibly" id="-644280324%2FFunctions%2F-1999498816" data-filterable-set=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="lock-interruptibly.html"><span>lock</span><wbr><span><span>Interruptibly</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-644280324%2FFunctions%2F-1999498816"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/nonConcurrentMain" data-toggle=":koncurrent/nonConcurrentMain">nonConcurrent</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="lock-interruptibly.html"><span class="token function">lockInterruptibly</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Acquires the lock as <a href="lock.html">lock</a> does, unless the thread is interrupted.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="lock-interruptibly.html"><span class="token function">lockInterruptibly</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Acquires the lock as <a href="../-lock/lock.html">lock</a> does, unless the thread is interrupted.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonConcurrentMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="lock-interruptibly.html"><span class="token function">lockInterruptibly</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Acquires the lock as <a href="../-lock/lock.html">lock</a> does, unless the thread is interrupted.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1515501125%2FFunctions%2F-1999498816" anchor-label="newCondition" id="1515501125%2FFunctions%2F-1999498816" data-filterable-set=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="new-condition.html"><span>new</span><wbr><span><span>Condition</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1515501125%2FFunctions%2F-1999498816"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/nonConcurrentMain" data-toggle=":koncurrent/nonConcurrentMain">nonConcurrent</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">fun </span><a href="new-condition.html"><span class="token function">newCondition</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-condition/index.html">Condition</a></div><div class="brief "><p class="paragraph">Returns a new <a href="../-condition/index.html">Condition</a> bound to this lock. A thread that holds the lock waits on it until another thread, which holds the lock in turn, signals it.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="new-condition.html"><span class="token function">newCondition</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-condition/index.html">Condition</a></div><div class="brief "><p class="paragraph">Returns a new <a href="../-condition/index.html">Condition</a> bound to this lock. A thread that holds the lock waits on it until another thread, which holds the lock in turn, signals it.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonConcurrentMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="new-condition.html"><span class="token function">newCondition</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-condition/index.html">Condition</a></div><div class="brief "><p class="paragraph">Returns a new <a href="../-condition/index.html">Condition</a> bound to this lock. A thread that holds the lock waits on it until another thread, which holds the lock in turn, signals it.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1420721020%2FFunctions%2F-1999498816" anchor-label="tryLock" id="-1420721020%2FFunctions%2F-1999498816" data-filterable-set=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="try-lock.html"><span>try</span><wbr><span><span>Lock</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1420721020%2FFunctions%2F-1999498816"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/nonConcurrentMain" data-toggle=":koncurrent/nonConcurrentMain">nonConcurrent</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="try-lock.html"><span class="token function">tryLock</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Acquires the lock if no other thread holds it. Never waits.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="try-lock.html"><span class="token function">tryLock</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Acquires the lock if that is possible at once. Never waits.</p></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="try-lock.html"><span class="token function">tryLock</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">timeout<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.time/-duration/index.html">Duration</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Acquires the lock if that is possible within <a href="../-lock/try-lock.html">timeout</a>. Does not wait when <a href="../-lock/try-lock.html">timeout</a> is zero or negative. Common code reaches it through the extension of the same name.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonConcurrentMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="try-lock.html"><span class="token function">tryLock</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Acquires the lock if that is possible at once. Never waits.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="765905028%2FFunctions%2F-691840454" anchor-label="tryLock" id="765905028%2FFunctions%2F-691840454" data-filterable-set=":koncurrent/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../try-lock.html"><span>try</span><wbr><span><span>Lock</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="765905028%2FFunctions%2F-691840454"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-lock/index.html">Lock</a><span class="token punctuation">.</span><a href="../try-lock.html"><span class="token function">tryLock</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">timeout<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.time/-duration/index.html">Duration</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Acquires the lock if that is possible within <a href="../try-lock.html">timeout</a>. Does not wait when <a href="../try-lock.html">timeout</a> is zero or negative.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="804992188%2FFunctions%2F-1999498816" anchor-label="unlock" id="804992188%2FFunctions%2F-1999498816" data-filterable-set=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/commonMain,:koncurrent/nativeMain,:koncurrent/nonConcurrentMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="unlock.html"><span><span>unlock</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="804992188%2FFunctions%2F-1999498816"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain" data-active="" data-toggle=":koncurrent/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nonConcurrentMain" data-filterable-set=":koncurrent/nonConcurrentMain" data-toggle=":koncurrent/nonConcurrentMain">nonConcurrent</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="unlock.html"><span class="token function">unlock</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Releases one hold of the lock. The lock is free once the current thread has released all its holds.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="unlock.html"><span class="token function">unlock</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Releases the lock.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nonConcurrentMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="unlock.html"><span class="token function">unlock</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Releases the lock.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1832035408%2FFunctions%2F-691840454" anchor-label="withLock" id="-1832035408%2FFunctions%2F-691840454" data-filterable-set=":koncurrent/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":koncurrent/commonMain" data-filterable-set=":koncurrent/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../with-lock.html"><span>with</span><wbr><span><span>Lock</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1832035408%2FFunctions%2F-691840454"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-ignorable-return-value/index.html"><span class="token annotation builtin">IgnorableReturnValue</span></a></div></div><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../with-lock.html">T</a><span class="token operator">&gt; </span><a href="../-lock/index.html">Lock</a><span class="token punctuation">.</span><a href="../with-lock.html"><span class="token function">withLock</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">action<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../with-lock.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../with-lock.html">T</a></div><div class="brief "><p class="paragraph">Runs <a href="../with-lock.html">action</a> while holding this lock, and returns its result. The lock is released when <a href="../with-lock.html">action</a> returns or throws.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Maanrifa Bacar Ali</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

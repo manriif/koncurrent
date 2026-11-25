@@ -1,0 +1,335 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Thread</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    Koncurrent
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.0.1
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":koncurrent/concurrentMain">concurrent</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":koncurrent/javaMain">java</button>
+                <button class="platform-tag platform-selector native-like" data-active="" aria-pressed="true" data-filter=":koncurrent/nativeMain">native</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":koncurrent/concurrentMain" data-filter=":koncurrent/concurrentMain">
+                                <span class="checkbox--icon"></span>
+                                concurrent
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":koncurrent/javaMain" data-filter=":koncurrent/javaMain">
+                                <span class="checkbox--icon"></span>
+                                java
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option native-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":koncurrent/nativeMain" data-filter=":koncurrent/nativeMain">
+                                <span class="checkbox--icon"></span>
+                                native
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    Koncurrent
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="Koncurrent::koncurrent/Thread///PointingToDeclaration//1346693056">
+  <div class="breadcrumbs"><a href="../../index.html">Koncurrent</a><span class="delimiter">/</span><a href="../index.html">koncurrent</a><span class="delimiter">/</span><span class="current">Thread</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Thread</span></span></h1>
+    <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+      <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/concurrentMain" data-filterable-set=":koncurrent/concurrentMain" data-active="" data-toggle=":koncurrent/concurrentMain">concurrent</button><button class="platform-bookmark" data-filterable-current=":koncurrent/javaMain" data-filterable-set=":koncurrent/javaMain" data-toggle=":koncurrent/javaMain">java</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/concurrentMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">class </span><a href="index.html">Thread</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">target<span class="token operator">: </span><a href="../-runnable/index.html">Runnable</a></span></span><span class="token punctuation">)</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/concurrentMain/kotlin/koncurrent/Thread.kt#L59">source</a>)</span></span></div><p class="paragraph">A thread, which runs code at the same time as the other threads of the program.</p><p class="paragraph">A thread runs its <a href="../-runnable/index.html">Runnable</a> once <a href="start.html">start</a> is called, and ends when that returns. <a href="join.html">join</a> waits for its end. An exception that escapes the <a href="../-runnable/index.html">Runnable</a> ends the thread, which prints the stack trace. Prefer <a href="../thread.html">thread</a>, which creates and starts a thread from a lambda.</p><h3 class="">Interruption</h3><p class="paragraph"><a href="interrupt.html">interrupt</a> asks a thread to stop what it is doing. It only sets a flag of the thread. A function of this library that waits throws <a href="../-interrupted-exception/index.html">InterruptedException</a> when it finds the flag set, and clears it: <a href="../sleep.html">sleep</a>, <a href="join.html">join</a>, the waits of a condition, of a semaphore and of a latch, and the ways to take a lock that say so. A thread that waits in one of them is woken up for that. Code that does not wait reads the flag itself, with <a href="is-interrupted.html">isInterrupted</a> or <a href="../interrupted.html">interrupted</a>.</p><h3 class="">Platforms</h3><ul><li><p class="paragraph">On the JVM and Android this is <code class="lang-kotlin">java.lang.Thread</code>.</p></li><li><p class="paragraph">On native this is a thread of the system, with three limits.</p></li><li><p class="paragraph"><a href="interrupt.html">interrupt</a> does not wake a thread up from a call to the system, like a read of a file.</p></li><li><p class="paragraph">A program ends when its main function returns, whether threads still run or not. So      <a href="set-daemon.html">setDaemon</a> changes nothing there.</p></li><li><p class="paragraph"><a href="../current-thread.html">currentThread</a> also works on a thread that this library did not start, like the main      one. Such a thread never tells that it ended. <a href="is-alive.html">isAlive</a> stays <code class="lang-kotlin">true</code>, and <a href="join.html">join</a> waits      until its time is over, or forever.</p></li><li><p class="paragraph">JS and Wasm have one thread, so this class does not exist there.</p></li></ul><h4 class="tableheader">Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":koncurrent/concurrentMain" data-filterable-set=":koncurrent/concurrentMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>target</span></span></u></div></span></div><div><div class="title"><p class="paragraph">what the thread runs</p></div></div></div></div></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/javaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">typealias </span><a href="index.html">Thread</a><span class="token operator"> = </span><a href="https://developer.android.com/reference/kotlin/java/lang/Thread.html">java.lang.Thread</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/javaMain/kotlin/koncurrent/Thread.java.kt#L24">source</a>)</span></span></div><p class="paragraph">A thread, which runs code at the same time as the other threads of the program.</p><p class="paragraph">A thread runs its <a href="../-runnable/index.html">Runnable</a> once <a href="start.html">start</a> is called, and ends when that returns. <a href="join.html">join</a> waits for its end. An exception that escapes the <a href="../-runnable/index.html">Runnable</a> ends the thread, which prints the stack trace. Prefer <a href="../thread.html">thread</a>, which creates and starts a thread from a lambda.</p><h3 class="">Interruption</h3><p class="paragraph"><a href="interrupt.html">interrupt</a> asks a thread to stop what it is doing. It only sets a flag of the thread. A function of this library that waits throws <a href="../-interrupted-exception/index.html">InterruptedException</a> when it finds the flag set, and clears it: <a href="../sleep.html">sleep</a>, <a href="join.html">join</a>, the waits of a condition, of a semaphore and of a latch, and the ways to take a lock that say so. A thread that waits in one of them is woken up for that. Code that does not wait reads the flag itself, with <a href="is-interrupted.html">isInterrupted</a> or <a href="../interrupted.html">interrupted</a>.</p><h3 class="">Platforms</h3><ul><li><p class="paragraph">On the JVM and Android this is <code class="lang-kotlin">java.lang.Thread</code>.</p></li><li><p class="paragraph">On native this is a thread of the system, with three limits.</p></li><li><p class="paragraph"><a href="interrupt.html">interrupt</a> does not wake a thread up from a call to the system, like a read of a file.</p></li><li><p class="paragraph">A program ends when its main function returns, whether threads still run or not. So      <a href="set-daemon.html">setDaemon</a> changes nothing there.</p></li><li><p class="paragraph"><a href="../current-thread.html">currentThread</a> also works on a thread that this library did not start, like the main      one. Such a thread never tells that it ended. <a href="is-alive.html">isAlive</a> stays <code class="lang-kotlin">true</code>, and <a href="join.html">join</a> waits      until its time is over, or forever.</p></li><li><p class="paragraph">JS and Wasm have one thread, so this class does not exist there.</p></li></ul><h4 class="tableheader">Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":koncurrent/javaMain" data-filterable-set=":koncurrent/javaMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>target</span></span></u></div></span></div><div><div class="title"><p class="paragraph">what the thread runs</p></div></div></div></div></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">class </span><a href="index.html">Thread</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">target<span class="token operator">: </span><a href="../-runnable/index.html">Runnable</a></span></span><span class="token punctuation">)</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/manriif/koncurrent/tree/main/koncurrent/src/nativeMain/kotlin/koncurrent/Thread.native.kt#L43">source</a>)</span></span></div><p class="paragraph">A thread, which runs code at the same time as the other threads of the program.</p><p class="paragraph">A thread runs its <a href="../-runnable/index.html">Runnable</a> once <a href="start.html">start</a> is called, and ends when that returns. <a href="join.html">join</a> waits for its end. An exception that escapes the <a href="../-runnable/index.html">Runnable</a> ends the thread, which prints the stack trace. Prefer <a href="../thread.html">thread</a>, which creates and starts a thread from a lambda.</p><h3 class="">Interruption</h3><p class="paragraph"><a href="interrupt.html">interrupt</a> asks a thread to stop what it is doing. It only sets a flag of the thread. A function of this library that waits throws <a href="../-interrupted-exception/index.html">InterruptedException</a> when it finds the flag set, and clears it: <a href="../sleep.html">sleep</a>, <a href="join.html">join</a>, the waits of a condition, of a semaphore and of a latch, and the ways to take a lock that say so. A thread that waits in one of them is woken up for that. Code that does not wait reads the flag itself, with <a href="is-interrupted.html">isInterrupted</a> or <a href="../interrupted.html">interrupted</a>.</p><h3 class="">Platforms</h3><ul><li><p class="paragraph">On the JVM and Android this is <code class="lang-kotlin">java.lang.Thread</code>.</p></li><li><p class="paragraph">On native this is a thread of the system, with three limits.</p></li><li><p class="paragraph"><a href="interrupt.html">interrupt</a> does not wake a thread up from a call to the system, like a read of a file.</p></li><li><p class="paragraph">A program ends when its main function returns, whether threads still run or not. So      <a href="set-daemon.html">setDaemon</a> changes nothing there.</p></li><li><p class="paragraph"><a href="../current-thread.html">currentThread</a> also works on a thread that this library did not start, like the main      one. Such a thread never tells that it ended. <a href="is-alive.html">isAlive</a> stays <code class="lang-kotlin">true</code>, and <a href="join.html">join</a> waits      until its time is over, or forever.</p></li><li><p class="paragraph">JS and Wasm have one thread, so this class does not exist there.</p></li></ul><h4 class="tableheader">Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>target</span></span></u></div></span></div><div><div class="title"><p class="paragraph">what the thread runs</p></div></div></div></div></div></div>    </div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-1682543208%2FConstructors%2F-742053188" anchor-label="Thread" id="-1682543208%2FConstructors%2F-742053188" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":koncurrent/concurrentMain,:koncurrent/nativeMain" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-thread.html"><span><span>Thread</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1682543208%2FConstructors%2F-742053188"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/concurrentMain" data-filterable-set=":koncurrent/concurrentMain" data-active="" data-toggle=":koncurrent/concurrentMain">concurrent</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/concurrentMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">target<span class="token operator">: </span><a href="../-runnable/index.html">Runnable</a></span></span><span class="token punctuation">)</span></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">target<span class="token operator">: </span><a href="../-runnable/index.html">Runnable</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A thread, which runs code at the same time as the other threads of the program.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-1751615551%2FFunctions%2F-742053188" anchor-label="getName" id="-1751615551%2FFunctions%2F-742053188" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/concurrentMain,:koncurrent/nativeMain" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-name.html"><span>get</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1751615551%2FFunctions%2F-742053188"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/concurrentMain" data-filterable-set=":koncurrent/concurrentMain" data-active="" data-toggle=":koncurrent/concurrentMain">concurrent</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/concurrentMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">fun </span><a href="get-name.html"><span class="token function">getName</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Returns the name of the thread. A new thread is named <code class="lang-kotlin">Thread-</code> followed by a number.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="get-name.html"><span class="token function">getName</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Returns the name of the thread. A new thread is named <code class="lang-kotlin">Thread-</code> followed by a number.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1015350945%2FFunctions%2F-742053188" anchor-label="interrupt" id="-1015350945%2FFunctions%2F-742053188" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/concurrentMain,:koncurrent/nativeMain" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="interrupt.html"><span><span>interrupt</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1015350945%2FFunctions%2F-742053188"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/concurrentMain" data-filterable-set=":koncurrent/concurrentMain" data-active="" data-toggle=":koncurrent/concurrentMain">concurrent</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/concurrentMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">fun </span><a href="interrupt.html"><span class="token function">interrupt</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Sets the interrupted flag of the thread, and wakes it up if it waits in a function that an interrupt ends.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="interrupt.html"><span class="token function">interrupt</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Sets the interrupted flag of the thread, and wakes it up if it waits in a function that an interrupt ends.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="202134335%2FFunctions%2F-742053188" anchor-label="isAlive" id="202134335%2FFunctions%2F-742053188" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/concurrentMain,:koncurrent/nativeMain" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-alive.html"><span>is</span><wbr><span><span>Alive</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="202134335%2FFunctions%2F-742053188"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/concurrentMain" data-filterable-set=":koncurrent/concurrentMain" data-active="" data-toggle=":koncurrent/concurrentMain">concurrent</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/concurrentMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">fun </span><a href="is-alive.html"><span class="token function">isAlive</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Tells whether the thread was started and has not ended yet.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="is-alive.html"><span class="token function">isAlive</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Tells whether the thread was started and has not ended yet.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="561735658%2FFunctions%2F-742053188" anchor-label="isDaemon" id="561735658%2FFunctions%2F-742053188" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/concurrentMain,:koncurrent/nativeMain" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-daemon.html"><span>is</span><wbr><span><span>Daemon</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="561735658%2FFunctions%2F-742053188"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/concurrentMain" data-filterable-set=":koncurrent/concurrentMain" data-active="" data-toggle=":koncurrent/concurrentMain">concurrent</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/concurrentMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">fun </span><a href="is-daemon.html"><span class="token function">isDaemon</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Tells whether the thread is a daemon. See <a href="set-daemon.html">setDaemon</a>.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="is-daemon.html"><span class="token function">isDaemon</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Tells whether the thread is a daemon. See <a href="set-daemon.html">setDaemon</a>.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1715561430%2FFunctions%2F-742053188" anchor-label="isInterrupted" id="-1715561430%2FFunctions%2F-742053188" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/concurrentMain,:koncurrent/nativeMain" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-interrupted.html"><span>is</span><wbr><span><span>Interrupted</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1715561430%2FFunctions%2F-742053188"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/concurrentMain" data-filterable-set=":koncurrent/concurrentMain" data-active="" data-toggle=":koncurrent/concurrentMain">concurrent</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/concurrentMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">fun </span><a href="is-interrupted.html"><span class="token function">isInterrupted</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Tells whether the interrupted flag of the thread is set. Does not clear it.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="is-interrupted.html"><span class="token function">isInterrupted</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Tells whether the interrupted flag of the thread is set. Does not clear it.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1616058382%2FFunctions%2F-742053188" anchor-label="join" id="1616058382%2FFunctions%2F-742053188" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/concurrentMain,:koncurrent/nativeMain" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="join.html"><span><span>join</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1616058382%2FFunctions%2F-742053188"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/concurrentMain" data-filterable-set=":koncurrent/concurrentMain" data-active="" data-toggle=":koncurrent/concurrentMain">concurrent</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/concurrentMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">fun </span><a href="join.html"><span class="token function">join</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Waits for the end of the thread. Returns at once if it has ended, or was never started.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="join.html"><span class="token function">join</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Waits for the end of the thread. Returns at once if it has ended, or was never started.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1447950649%2FFunctions%2F1728300218" anchor-label="join" id="1447950649%2FFunctions%2F1728300218" data-filterable-set=":koncurrent/concurrentMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":koncurrent/concurrentMain" data-filterable-set=":koncurrent/concurrentMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../join.html"><span><span>join</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1447950649%2FFunctions%2F1728300218"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/concurrentMain" data-filterable-set=":koncurrent/concurrentMain" data-active="" data-toggle=":koncurrent/concurrentMain">concurrent</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/concurrentMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">Thread</a><span class="token punctuation">.</span><a href="../join.html"><span class="token function">join</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">timeout<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.time/-duration/index.html">Duration</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Waits for the end of this thread, for <a href="../join.html">timeout</a> at most.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1443782113%2FFunctions%2F-742053188" anchor-label="setDaemon" id="1443782113%2FFunctions%2F-742053188" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/concurrentMain,:koncurrent/nativeMain" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-daemon.html"><span>set</span><wbr><span><span>Daemon</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1443782113%2FFunctions%2F-742053188"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/concurrentMain" data-filterable-set=":koncurrent/concurrentMain" data-active="" data-toggle=":koncurrent/concurrentMain">concurrent</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/concurrentMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">fun </span><a href="set-daemon.html"><span class="token function">setDaemon</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">on<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Makes the thread a daemon, or not. The JVM ends a program once only daemon threads are left. To call before <a href="start.html">start</a>.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="set-daemon.html"><span class="token function">setDaemon</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">on<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Makes the thread a daemon, or not. The JVM ends a program once only daemon threads are left. To call before <a href="start.html">start</a>.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1225058065%2FFunctions%2F-742053188" anchor-label="setName" id="-1225058065%2FFunctions%2F-742053188" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/concurrentMain,:koncurrent/nativeMain" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-name.html"><span>set</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1225058065%2FFunctions%2F-742053188"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/concurrentMain" data-filterable-set=":koncurrent/concurrentMain" data-active="" data-toggle=":koncurrent/concurrentMain">concurrent</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/concurrentMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">fun </span><a href="set-name.html"><span class="token function">setName</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Gives the thread another name.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="set-name.html"><span class="token function">setName</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Gives the thread another name.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1017244352%2FFunctions%2F-742053188" anchor-label="start" id="1017244352%2FFunctions%2F-742053188" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":koncurrent/concurrentMain,:koncurrent/nativeMain" data-filterable-set=":koncurrent/concurrentMain,:koncurrent/nativeMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="start.html"><span><span>start</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1017244352%2FFunctions%2F-742053188"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":koncurrent/concurrentMain" data-filterable-set=":koncurrent/concurrentMain" data-active="" data-toggle=":koncurrent/concurrentMain">concurrent</button><button class="platform-bookmark" data-filterable-current=":koncurrent/nativeMain" data-filterable-set=":koncurrent/nativeMain" data-toggle=":koncurrent/nativeMain">native</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":koncurrent/concurrentMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">fun </span><a href="start.html"><span class="token function">start</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Makes the thread run. Returns at once, while the thread runs its <a href="../-runnable/index.html">Runnable</a>.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":koncurrent/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">fun </span><a href="start.html"><span class="token function">start</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Makes the thread run. Returns at once, while the thread runs its <a href="../-runnable/index.html">Runnable</a>.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Maanrifa Bacar Ali</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
