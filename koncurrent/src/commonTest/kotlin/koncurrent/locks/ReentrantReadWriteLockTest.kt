@@ -31,11 +31,37 @@ import kotlin.time.Duration.Companion.milliseconds
 /**
  * Tests what one thread sees of the public [ReentrantReadWriteLock].
  */
-class ReentrantReadWriteLockTest {
+open class ReentrantReadWriteLockTest {
+
+    protected open val fair: Boolean
+        get() = false
+
+    private fun newLock(): ReentrantReadWriteLock =
+        if (fair) ReentrantReadWriteLock(true) else ReentrantReadWriteLock()
+
+    @Test
+    fun lockTellsWhetherItIsFair() {
+        assertEquals(fair, newLock().isFair())
+        assertFalse(ReentrantReadWriteLock(false).isFair())
+    }
+
+    @Test
+    fun lockIsAReadWriteLock() {
+        val lock = newLock()
+        val locks: ReadWriteLock = lock
+
+        locks.readLock().lock()
+        assertEquals(1, lock.getReadHoldCount())
+        locks.readLock().unlock()
+
+        locks.writeLock().lock()
+        assertEquals(1, lock.getWriteHoldCount())
+        locks.writeLock().unlock()
+    }
 
     @Test
     fun readLockCountsItsHolds() {
-        val lock = ReentrantReadWriteLock()
+        val lock = newLock()
         val readLock = lock.readLock()
 
         readLock.lock()
@@ -52,7 +78,7 @@ class ReentrantReadWriteLockTest {
 
     @Test
     fun writeLockCountsItsHolds() {
-        val lock = ReentrantReadWriteLock()
+        val lock = newLock()
         val writeLock = lock.writeLock()
 
         writeLock.lock()
@@ -69,7 +95,7 @@ class ReentrantReadWriteLockTest {
 
     @Test
     fun writerCanReadAndKeepReading() {
-        val lock = ReentrantReadWriteLock()
+        val lock = newLock()
 
         lock.writeLock().lock()
         lock.readLock().lock()
@@ -86,7 +112,7 @@ class ReentrantReadWriteLockTest {
 
     @Test
     fun readerCannotTakeTheWriteLock() {
-        val lock = ReentrantReadWriteLock()
+        val lock = newLock()
 
         lock.readLock().lock()
         assertFalse(lock.writeLock().tryLock())
@@ -99,7 +125,7 @@ class ReentrantReadWriteLockTest {
 
     @Test
     fun readAndWriteReturnTheValueOfTheirAction() {
-        val lock = ReentrantReadWriteLock()
+        val lock = newLock()
 
         assertEquals("read", lock.read { "read" })
         assertEquals("write", lock.write { "write" })
@@ -110,7 +136,7 @@ class ReentrantReadWriteLockTest {
 
     @Test
     fun readAndWriteReleaseWhenTheirActionFails() {
-        val lock = ReentrantReadWriteLock()
+        val lock = newLock()
 
         assertFailsWith<IllegalArgumentException> {
             lock.read { throw IllegalArgumentException() }
@@ -126,7 +152,7 @@ class ReentrantReadWriteLockTest {
 
     @Test
     fun writeGivesBackTheReadHoldsOfItsCaller() {
-        val lock = ReentrantReadWriteLock()
+        val lock = newLock()
 
         lock.read {
             lock.read {
@@ -145,7 +171,7 @@ class ReentrantReadWriteLockTest {
 
     @Test
     fun nestedWriteKeepsTheReadHoldsTakenWhileWriting() {
-        val lock = ReentrantReadWriteLock()
+        val lock = newLock()
 
         lock.write {
             lock.read {
@@ -162,7 +188,7 @@ class ReentrantReadWriteLockTest {
 
     @Test
     fun bothLocksAreLocks() {
-        val lock = ReentrantReadWriteLock()
+        val lock = newLock()
         val locks: List<Lock> = listOf(lock.readLock(), lock.writeLock())
 
         assertEquals(listOf(0, 1), locks.mapIndexed { index, each -> each.withLock { index } })
@@ -173,7 +199,7 @@ class ReentrantReadWriteLockTest {
 
     @Test
     fun freeLocksAreAcquiredInEveryWay() {
-        val lock = ReentrantReadWriteLock()
+        val lock = newLock()
         val read: Lock = lock.readLock()
         val write: Lock = lock.writeLock()
 
@@ -192,7 +218,7 @@ class ReentrantReadWriteLockTest {
 
     @Test
     fun timedTryLockOfTheWriteLockGivesUpWhileReading() {
-        val lock = ReentrantReadWriteLock()
+        val lock = newLock()
         val write: Lock = lock.writeLock()
 
         lock.readLock().lock()
@@ -202,4 +228,13 @@ class ReentrantReadWriteLockTest {
 
         lock.readLock().unlock()
     }
+}
+
+/**
+ * Tests what one thread sees of the public [ReentrantReadWriteLock] when it is fair.
+ */
+class FairReentrantReadWriteLockTest : ReentrantReadWriteLockTest() {
+
+    override val fair: Boolean
+        get() = true
 }

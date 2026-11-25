@@ -19,14 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package koncurrent
+package koncurrent.internal
 
 /**
- * What a [Thread] runs. A lambda converts to it, as in `Thread { work() }`.
+ * Orders what the calling thread read before this call ahead of the atomic that it reads next.
+ * It is the load fence of JSR-166, which Kotlin does not have.
  *
- * On the JVM and Android this is `java.lang.Runnable`.
+ * A thread that reads without a lock reads a version, then the data, then the version again.
+ * The last read may come before the ones in the middle, which then prove nothing. Some
+ * processors run them in that order. On every processor the compiler may too, since LLVM is
+ * allowed to move a plain read past the read of an atomic. A write of an atomic comes after
+ * the reads made before it, and before the read of an atomic that follows, for both of them.
+ * So this writes one.
+ *
+ * It does nothing where there is one thread.
  */
-public expect fun interface Runnable {
-
-    public fun run()
-}
+internal expect fun loadFence()

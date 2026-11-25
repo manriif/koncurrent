@@ -21,12 +21,31 @@
  */
 package koncurrent.internal
 
+import koncurrent.BlockingDeque
+import koncurrent.BlockingQueue
 import koncurrent.locks.Condition
 import koncurrent.locks.Lock
 import kotlin.time.Duration.Companion.nanoseconds
 
-// Both call the member that the interface has on these targets
+// Each calls the member that the interface has on these targets
 
 internal actual fun Lock.tryLockWithin(nanos: Long): Boolean = tryLock(nanos.nanoseconds)
 
 internal actual fun Condition.awaitWithin(nanos: Long): Boolean = await(nanos.nanoseconds)
+
+internal actual fun <E : Any> BlockingQueue<E>.offerWithin(element: E, nanos: Long): Boolean =
+    offer(element, nanos.nanoseconds)
+
+internal actual fun <E : Any> BlockingQueue<E>.pollWithin(nanos: Long): E? = poll(nanos.nanoseconds)
+
+internal actual fun <E : Any> BlockingDeque<E>.offerFirstWithin(element: E, nanos: Long): Boolean =
+    offerFirst(element, nanos.nanoseconds)
+
+internal actual fun <E : Any> BlockingDeque<E>.offerLastWithin(element: E, nanos: Long): Boolean =
+    offerLast(element, nanos.nanoseconds)
+
+internal actual fun <E : Any> BlockingDeque<E>.pollFirstWithin(nanos: Long): E? =
+    pollFirst(nanos.nanoseconds)
+
+internal actual fun <E : Any> BlockingDeque<E>.pollLastWithin(nanos: Long): E? =
+    pollLast(nanos.nanoseconds)

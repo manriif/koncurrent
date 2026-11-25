@@ -38,9 +38,10 @@ private const val BRIEF_NANOS = 1L
  * and never leaves one waiting. The counter is a plain field, so two threads inside at once
  * lose an increment.
  */
-class PortableSemaphoreLinearizabilityTest {
+abstract class SemaphoreLinearizabilityTest internal constructor(
+    private val semaphore: PortableSemaphore,
+) {
 
-    private val semaphore = PortableSemaphore(1)
     private var counter = 0
 
     @Operation
@@ -85,7 +86,7 @@ class PortableSemaphoreLinearizabilityTest {
     // Lets Lincheck tell that two sequential executions reached the same state
 
     override fun equals(other: Any?): Boolean =
-        other is PortableSemaphoreLinearizabilityTest && other.counter == counter
+        other is SemaphoreLinearizabilityTest && other.counter == counter
 
     override fun hashCode(): Int = counter
 
@@ -106,3 +107,13 @@ class PortableSemaphoreLinearizabilityTest {
             .check(this::class)
     }
 }
+
+class PortableSemaphoreLinearizabilityTest :
+    SemaphoreLinearizabilityTest(PortableSemaphore(1))
+
+/**
+ * Checks the semaphore when it is fair. Its threads look at the queue before they take a
+ * permit.
+ */
+class PortableFairSemaphoreLinearizabilityTest :
+    SemaphoreLinearizabilityTest(PortableSemaphore(1, fair = true))

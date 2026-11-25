@@ -27,7 +27,7 @@ pluginManagement {
 }
 
 plugins {
-    id("io.github.manriif.konventions") version "0.0.3"
+    id("io.github.manriif.konventions") version "0.0.4"
 }
 
 rootProject.name = "koncurrent-project"

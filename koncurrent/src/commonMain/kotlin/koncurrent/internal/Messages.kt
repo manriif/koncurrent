@@ -24,3 +24,13 @@ package koncurrent.internal
 internal const val LOCK_NOT_HELD = "The current thread does not hold the lock"
 internal const val READ_LOCK_NOT_HELD = "The current thread does not hold the read lock"
 internal const val WRITE_LOCK_NOT_HELD = "The current thread does not hold the write lock"
+internal const val STAMP_NOT_HELD = "The stamp is not the one of a lock that is held"
+internal const val NO_READ_LOCK_HELD = "No thread holds the read lock"
+internal const val NO_WRITE_LOCK_HELD = "No thread holds the write lock"
+
+// The messages that the queues of the JDK have
+internal const val QUEUE_FULL = "Queue full"
+internal const val DEQUE_FULL = "Deque full"
+
+internal const val ADDED_TO_ITSELF = "A queue cannot be added to itself"
+internal const val DRAINED_TO_ITSELF = "A queue cannot be drained to itself"

@@ -1,20 +1,30 @@
 # Benchmarks
 
-What Koncurrent costs against the JDK and against Stately, and how the figures were taken.
-[CONTRIBUTING.md](../CONTRIBUTING.md#benchmarks) tells how to run them.
+What Koncurrent costs against the JDK and against Stately, how the figures were taken, and what each
+optimization brought. [CONTRIBUTING.md](../CONTRIBUTING.md#benchmarks) tells how to run them.
 
 ## Summary
 
-- **Native.** One thread reads the map 2.2 to 3.8 times faster than through Stately. With 8
-  threads the map does 15 to 34 times the work of Stately on mixed workloads, and 33 to 66
-  times on `computeIfAbsent` of present keys. Stately only wins when one thread fills a map of
-  a million keys, where Koncurrent is 27% behind.
-- **JVM.** The map is the one of the JDK there. The port, which the other targets use, stays
-  within 7% of the JDK on most workloads. It is 11% to 17% behind on inserts into a new map and
-  where several threads update few keys.
-- **Locks.** On native `ReentrantLock` does 1.6 to 3.3 times the work of the Stately lock, and
-  more than a bare `pthread_mutex` at every thread count. The read lock is slower than
-  `ReentrantLock` when it is held for a few instructions only.
+- **Native.** One thread reads the map 2.2 to 3.8 times faster than through Stately. With 8 threads
+  the map does 15 to 34 times the work of Stately on mixed workloads, and 33 to 66 times on
+  `computeIfAbsent` of present keys. Stately only wins when one thread fills a map of a million
+  keys, where Koncurrent is 27% behind.
+- **JVM.** The map is the one of the JDK there. The port, which the other targets use, stays within
+  7% of the JDK on most workloads. It is 11% to 17% behind on inserts into a new map and where
+  several threads update few keys.
+- **Locks.** On native `ReentrantLock` does 1.8 to 4.0 times the work of the Stately lock, and more
+  than a bare `pthread_mutex` at every thread count. The read lock is slower than `ReentrantLock`
+  when it is held for a few instructions only.
+- **Stamped lock.** On native an optimistic read with its validation runs 528 million times per
+  second on one thread and 3.4 billion on eight. The read locks do 104 to 112 million on one thread,
+  and 10 to 25 on eight.
+- **Queues.** On native `ConcurrentLinkedQueue` hands over 78 million elements per second with one
+  thread and 21 to 31 million with 2 to 8 threads. That is 2 times, then about 4 times, what the
+  lock-free algorithm of the JDK gave there. `ArrayBlockingQueue` hands over 54 million with one
+  thread, and 18 to 26 with 2 to 8.
+- **Sorted map.** On native `ConcurrentSkipListMap` reads a key 5 to 7 times slower than the hash
+  map, which is the price of the order. Its readers do not wait for each other: with nine reads in
+  ten on a million keys, eight threads do more than 3 times the work of one.
 
 ## Setup
 
@@ -26,28 +36,35 @@ What Koncurrent costs against the JDK and against Stately, and how the figures w
 | Native | `macosArm64`, release binary |
 | Stately | 2.1.0 |
 
-**Keys.** A key holds a random hash code, like a string or an object identity. A map stores one
-set of keys and is asked for equal keys that are other instances, in another order. So a lookup
-calls `equals`, and it does not follow the order of insertion.
+**Keys.** A key holds a random hash code, like a string or an object identity. A map stores one set
+of keys and is asked for equal keys that are other instances, in another order. So a lookup calls
+`equals`, and it does not follow the order of insertion.
 
 **Workloads.**
 
-- `get` reads every key of a full map. `remove` empties a full map. `put` fills a new map,
-  which grows from its default size.
-- The mixed workloads start with half of the keys. Each operation picks a key at random. A
-  write is a `put` or a `remove` with equal chances, so the map keeps about half of the keys.
-- `computeIfAbsent` asks a full map for keys that it has. It is what a cache does once it is
-  filled.
-- A lock benchmark has every thread take the same lock to add one to a counter.
+- `get` reads every key of a full map. `remove` empties a full map. `put` fills a new map, which
+  grows from its default size.
+- The mixed workloads start with half of the keys. Each operation picks a key at random. A write is
+  a `put` or a `remove` with equal chances, so the map keeps about half of the keys.
+- `computeIfAbsent` asks a full map for keys that it has. It is what a cache does once it is filled.
+- A lock benchmark has every thread take the same lock to add one to a counter. Nothing else is done
+  under the lock, which is the worst case for it.
+- A queue benchmark has every thread add an element to the same queue, then take one, which may be
+  the element of another thread.
+- The sorted map runs the workloads of the maps on the same keys, which it keeps in the order of
+  their hash codes, through a comparator. The hash map is measured again in the same runs.
 
 **Method.** On the JVM each figure comes from JMH, with 3 warm-up iterations and 5 measured
 iterations of 2 seconds, and is the mean of two runs. kotlinx-benchmark only runs one thread on
-Kotlin/Native, so the native figures come from a harness of this project that starts real
-threads. It does 2 warm-up rounds and 5 measured rounds of 1 second and keeps the median. Each
-native figure is the median of three runs.
+Kotlin/Native, so the native figures come from a harness of this project that starts real threads.
+It does 2 warm-up rounds and 5 measured rounds of 1 second and keeps the median. Each native figure
+is the median of three runs.
 
-A figure marked \* comes from runs that differ by more than 15%. Take it as an order of
-magnitude.
+A figure marked \* comes from runs that differ by more than 15%. Take it as an order of magnitude.
+
+The tables were not all taken in the same session, and a figure only compares with the others of its
+table. The same `pthread_mutex` alone on its thread did 164 million pairs per second in one session
+and 116 in another.
 
 ## Maps on native
 
@@ -95,9 +112,9 @@ Millions of operations per second, all threads together. Higher is better.
 
 ## Maps on the JVM
 
-On the JVM `koncurrent.ConcurrentHashMap` is the class of the JDK, so the **JDK** column is what
-a JVM program gets. The **Port** column is the code that the other targets run, measured on the
-JVM where it can be compared with the original.
+On the JVM `koncurrent.ConcurrentHashMap` is the class of the JDK, so the **JDK** column is what a
+JVM program gets. The **Port** column is the code that the other targets run, measured on the JVM
+where it can be compared with the original.
 
 Millions of operations per second, all threads together. Higher is better.
 
@@ -141,23 +158,30 @@ Millions of lock and unlock pairs per second, all threads together. Higher is be
 
 | Lock | 1 thread | 2 threads | 4 threads | 8 threads |
 |---|---:|---:|---:|---:|
-| Koncurrent `ReentrantLock` | 129.2 | 57.9 | 58.7 | 63.6 |
-| Koncurrent write lock | 108.6 | 37.2 | 45.2 | 50.7 |
-| Koncurrent read lock | 104.3 | 21.6 \* | 29.4 | 24.0 |
-| Stately `Lock` | 82.2 | 36.7 \* | 22.2 | 19.1 |
-| `pthread_mutex` | 118.5 | 43.6 \* | 29.4 | 24.7 |
-| Spin lock word in an atomic array | 199.6 | 26.4 | 19.1 | 10.3 |
-| Spin lock word in an atomic of each node | 152.0 | 35.1 | 20.7 | 9.12 |
+| Koncurrent `ReentrantLock` | 147.8 | 66.1 | 69.7 | 72.8 |
+| Koncurrent write lock | 105.6 | 38.6 | 45.7 | 49.7 |
+| Koncurrent read lock | 103.6 | 21.7 | 29.1 | 24.6 |
+| Koncurrent `StampedLock`, write lock | 143.4 | 63.3 | 69.1 | 75.4 |
+| Koncurrent `StampedLock`, read lock | 111.8 | 20.4 | 14.0 | 9.83 |
+| Koncurrent `StampedLock`, optimistic read | 528.3 | 1075.6 | 2024.7 | 3413.9 |
+| Stately `Lock` | 81.0 | 36.3 | 22.1 | 18.3 |
+| `pthread_mutex` | 115.8 | 44.9 | 29.9 | 24.4 |
+| Spin lock word in an atomic array | 193.2 | 26.6 | 18.9 | 10.7 |
+| Spin lock word in an atomic of each node | 146.2 | 34.7 | 20.5 | 8.35 |
 
-The read lock is taken by threads that only read the counter. The other locks are taken to
-add one to it.
+The read locks are taken by threads that only read the counter. The other locks are taken to add one
+to it. An optimistic read reads the counter and validates its stamp, and no thread writes meanwhile.
 
-With two threads the read lock has two levels, about 21 and 25 million. Where the lock lands
-in memory decides which, and a run may get one or the other.
+Three things to know about these figures.
 
-The lock figures come from a later session than the map figures. A lock alone on its thread is
-slower in it: `pthread_mutex` does 118 where it did 164. Compare the rows of a table with each
-other.
+- **`ReentrantLock` alone does 148 here, and about 128 in a program that takes nothing else.** This
+  program has more classes that take the lock port, and the compiler then keeps the wait of the lock
+  out of its fast path.
+- **The read lock has two levels with two threads**, about 21 and 25 million. Where the lock lands
+  in memory decides which, and a run may get one or the other.
+- **A fair lock was measured apart.** Alone, a thread takes it at half the speed of a plain one, 63
+  against 129 million pairs. With 2 to 8 threads it does 0.36 million, against 58 to 63, since every
+  release hands the lock over to a thread that sleeps.
 
 **JVM**
 
@@ -173,63 +197,144 @@ other.
 | Spin lock word in an atomic array | 234.1 | 41.9 \* | 32.7 | 12.5 \* |
 | Spin lock word in an atomic of each node | 233.7 | 43.7 | 32.2 | 7.29 \* |
 
-The ports are the code that the native targets run, measured on the JVM against the classes
-of the JDK that they come from.
+The ports are the code that the native targets run, measured on the JVM against the classes of the
+JDK that they come from. No program runs them there, where the locks are the classes of the JDK. The
+write lock port is behind the one of the JDK with one thread, in part for
+[a choice that suits Kotlin/Native](#the-locks).
 
-The ports are written for Kotlin/Native, and one choice shows here. Each port waits in a
-function of its own. That is worth 19% to the read-write lock on native with one thread, and
-it costs the write lock port 13% and the read lock port 8% on the JVM. No program runs these
-ports on the JVM, where the locks are the classes of the JDK.
+With two threads the locks of the JDK have two levels, and a run gets one or the other. In four runs
+of the same code `ReentrantLock` did 11.5, 11.6, 14.0 and 50.9, and `synchronized` did 5.7 twice,
+then 23.6 and 23.8.
 
-With two threads the locks of the JDK have two levels, and a run gets one or the other. In four
-runs of the same code `ReentrantLock` did 11.5, 11.6, 14.0 and 50.9, and `synchronized` did
-5.7 twice, then 23.6 and 23.8.
+The two spin locks are there as references. The first one is the bin lock of the map port: a lock
+word for each bin, in an atomic array. The second one keeps the lock word in the node, which Kotlin
+atomics cannot do without one more object per node.
 
-The two spin locks are there as references. The first one is the bin lock of the map port: a
-lock word for each bin, in an atomic array. The second one keeps the lock word in the node,
-which Kotlin atomics cannot do without one more object per node.
+## Queues
+
+Millions of pairs of `offer` and `poll` per second on native, all threads together. Higher is
+better. The deques add at the head and take at the tail.
+
+| Queue | 1 thread | 2 threads | 4 threads | 8 threads |
+|---|---:|---:|---:|---:|
+| `ConcurrentLinkedQueue` | 77.8 | 21.4 | 26.2 | 31.1 |
+| `ConcurrentLinkedDeque` | 83.9 | 32.8 | 26.8 | 35.4 |
+| `ArrayBlockingQueue` | 54.2 | 22.7 | 18.1 | 25.5 |
+| `LinkedBlockingDeque` | 42.3 | 15.2 | 16.9 | 17.0 |
+| `LinkedBlockingQueue` | 37.8 | 7.26 | 4.10 \* | 10.4 |
+
+The two concurrent classes are one ring of elements under one lock. [Evolution](#the-queues) has the
+designs that were measured before that choice.
+
+`LinkedBlockingQueue` is the slowest when every thread adds and takes in turn. Its two locks let a
+thread that adds and a thread that takes work at the same time, and they pay for it when the queue
+is empty at each step: adding to an empty queue takes both locks, to wake up a thread that would
+wait for an element. It does better where some threads only add and others only take.
+
+On the JVM and Android these classes are the ones of the JDK.
+
+## Sorted map
+
+Millions of operations per second on native, all threads together. Higher is better. The hash map is
+`ConcurrentHashMap`, on the same keys in the same runs.
+
+**1 000 keys**
+
+| Workload | Threads | Sorted map | Hash map | Sorted against hash |
+|---|---:|---:|---:|---:|
+| `get` | 1 | 30.8 | 155.9 | 0.20x |
+| `put` into a new map | 1 | 18.1 | 30.2 | 0.60x |
+| `remove` | 1 | 21.3 | 80.9 | 0.26x |
+| 90% `get`, 5% `put`, 5% `remove` | 1 | 18.5 | 75.7 | 0.24x |
+| 90% `get`, 5% `put`, 5% `remove` | 2 | 19.7 | 113.9 | 0.17x |
+| 90% `get`, 5% `put`, 5% `remove` | 4 | 20.4 | 212.0 | 0.10x |
+| 90% `get`, 5% `put`, 5% `remove` | 8 | 13.4 | 234.0 \* | 0.06x |
+| 50% `get`, 25% `put`, 25% `remove` | 1 | 16.0 | 59.0 | 0.27x |
+| 50% `get`, 25% `put`, 25% `remove` | 2 | 9.80 | 59.2 | 0.17x |
+| 50% `get`, 25% `put`, 25% `remove` | 4 | 8.98 | 97.8 | 0.09x |
+| 50% `get`, 25% `put`, 25% `remove` | 8 | 7.67 | 89.6 | 0.09x |
+
+**1 000 000 keys**
+
+| Workload | Threads | Sorted map | Hash map | Sorted against hash |
+|---|---:|---:|---:|---:|
+| `get` | 1 | 1.95 \* | 14.3 | 0.14x |
+| `put` into a new map | 1 | 2.00 | 4.63 \* | 0.43x |
+| `remove` | 1 | 1.86 \* | 8.09 | 0.23x |
+| 90% `get`, 5% `put`, 5% `remove` | 1 | 2.32 | 9.43 | 0.25x |
+| 90% `get`, 5% `put`, 5% `remove` | 2 | 4.15 | 18.8 | 0.22x |
+| 90% `get`, 5% `put`, 5% `remove` | 4 | 6.61 | 36.2 | 0.18x |
+| 90% `get`, 5% `put`, 5% `remove` | 8 | 7.63 | 65.1 \* | 0.12x |
+| 50% `get`, 25% `put`, 25% `remove` | 1 | 2.11 | 7.10 | 0.30x |
+| 50% `get`, 25% `put`, 25% `remove` | 2 | 2.73 | 14.2 | 0.19x |
+| 50% `get`, 25% `put`, 25% `remove` | 4 | 2.68 | 26.4 | 0.10x |
+| 50% `get`, 25% `put`, 25% `remove` | 8 | 2.14 | 45.5 | 0.05x |
+
+On the JVM and Android this class is the skip list of the JDK, which takes no lock at all.
+[Design](design.md#the-sorted-map-and-set) tells how it is built elsewhere.
 
 ## Reading
 
-**Stately guards a standard collection with one lock.** Every operation takes it, lookups
-included. So its throughput does not grow with the threads. On native it falls, from 37.5
-million operations per second with one thread to 8.7 with eight. The map of Koncurrent locks
-one bin for an update and nothing for a lookup, so it scales until the memory does not follow.
+**Stately guards a standard collection with one lock.** Every operation takes it, lookups included.
+So its throughput does not grow with the threads. On native it falls, from 37.5 million operations
+per second with one thread to 8.7 with eight. The map of Koncurrent locks one bin for an update and
+nothing for a lookup, so it scales until the memory does not follow.
 
-**One thread.** A lookup that takes no lock is also faster when nobody else is there: 157
-million lookups per second against 41 on a map of a thousand keys.
+**One thread.** A lookup that takes no lock is also faster when nobody else is there: 157 million
+lookups per second against 41 on a map of a thousand keys.
 
-**Filling a large map is the weak spot.** A new map of a million keys grows 17 times. Each
-growth allocates a table, and Kotlin/Native copies the array given to an `AtomicArray`, so each
-table is allocated twice. The garbage collector takes the rest: a third to 42% of the time of
-this benchmark is spent waiting for it. Give the map its size when you know it,
+**Filling a large map is the weak spot.** A new map of a million keys grows 17 times. Each growth
+allocates a table, twice on Kotlin/Native, and the garbage collector takes the rest: a third to 42%
+of the time of this benchmark is spent waiting for it. Give the map its size when you know it,
 `ConcurrentHashMap(1_000_000)`.
 
-**The port against the JDK.** On reads and on large maps the port matches the original. It
-loses 11% to 17% where updates dominate. An update writes two cache lines there, the lock word
-and the node. The JDK writes one, because its lock is in the header of the node.
+**The port against the JDK.** On reads and on large maps the port matches the original. It loses 11%
+to 17% where updates dominate, since [an update writes two cache lines](design.md#the-map) where the
+JDK writes one.
 
-**The lock.** A thread that finds the lock taken tries a few more times before it goes to
-sleep. Sleeping and being woken up costs far more than a short critical section. This is why
-the port holds up with two threads on the JVM, about 100 million pairs per second, where the
-`ReentrantLock` of the JDK drops to between 12 and 51 and `synchronized` to between 6 and 24.
-The JDK lock wins again from four threads.
+**The lock.** A thread that finds the lock taken tries a few more times before it goes to sleep.
+Sleeping and being woken up costs far more than a short critical section. This is why the port holds
+up with two threads on the JVM, about 100 million pairs per second, where the `ReentrantLock` of the
+JDK drops to between 12 and 51 and `synchronized` to between 6 and 24. The JDK lock wins again from
+four threads.
 
-**The read-write lock.** A reader does not wait for the other readers, but it still writes the
-state of the lock, twice for each hold. With several readers that state moves from one
-processor to the other, and the read lock does 22 to 29 million pairs per second where
-`ReentrantLock` does 58 to 64. The benchmark is the worst case for it, since nothing is done
-under the lock. The read lock pays off when reading takes longer than taking a lock: threads
-that each read for a microsecond under a `ReentrantLock` do one million reads per second
-together, whatever their number.
+**The read-write lock.** A reader does not wait for the other readers, but it still writes the state
+of the lock, twice for each hold. With several readers that state moves from one processor to the
+other, and the read lock does 22 to 29 million pairs per second where `ReentrantLock` does 66 to 73.
+The read lock pays off when reading takes longer than taking a lock: threads that each read for a
+microsecond under a `ReentrantLock` do one million reads per second together, whatever their number.
+The read lock of the JDK has the same weakness, and a deeper one. On the JVM it falls to 4.3 million
+pairs per second with 8 readers, where the port does 18.6.
 
-The read lock of the JDK has the same weakness, and a deeper one. On the JVM it falls to 4.3
-million pairs per second with 8 readers, where the port does 18.6.
+**The stamped lock.** Its write lock keeps up with `ReentrantLock`: 143 million pairs per second
+alone, and 63 to 75 with 2 to 8 threads. Its read lock is the fastest read lock for one thread, 112
+against 104, since it counts nothing for the thread. With four threads and more it falls under the
+other one, 14.0 then 9.8 against 29.1 then 24.6. It releases a hold with an update that is tried
+again when another reader got in the way, where the read-write lock adds once.
+[Design](design.md#stampedlock) tells why it cannot do the same.
 
-## What the optimizations brought
+Its optimistic read is another matter. It writes nothing that the readers share, so it grows with
+them: 528 million reads and validations per second on one thread, 3.4 billion on eight. That is 5
+times a read lock on one thread and 140 times on eight. It is what the lock is for.
+
+**The sorted map.** It does more for each operation than a hash map. It compares its key a dozen
+times among a thousand keys, and more than twenty times among a million, where the hash map computes
+one hash code. So one thread reads it 5 to 7 times slower. With threads it depends on what they do.
+A read takes no lock, and a change takes the one lock of the map. With nine reads in ten on a
+million keys, eight threads do more than 3 times the work of one. With as many changes as reads the
+map stays where one thread puts it, since the changes take turns. On a small map an operation is so
+short that the lock is most of it, and more threads bring little.
+
+## Evolution
+
+What the ports gained on the way, and what was measured to decide how they are built.
+[Design](design.md) tells how each of these works. The figures are those of `macosArm64`, in the
+session of each change.
+
+### From the first version
 
 The first version of the ports was measured on the same machine before the optimization work.
-`macosArm64`, millions of operations per second.
+Millions of operations per second.
 
 | Workload | Keys | Threads | Before | After | Change |
 |---|---:|---:|---:|---:|---:|
@@ -260,27 +365,15 @@ The first version of the ports was measured on the same machine before the optim
 | `ReentrantLock` | - | 4 | 64.5 | 61.7 | -4% |
 | `ReentrantLock` | - | 8 | 63.8 | 86.1 | +35% |
 
-The gains on one thread come from one finding. Kotlin/Native gives each function a frame for
-the garbage collector, even when LLVM inlines it. A function that Kotlin inlines has none. The
-[design notes](design.md#what-makes-code-fast-on-kotlinnative) tell more.
+The gains on one thread come from one finding. Kotlin/Native gives each function a frame for the
+garbage collector, even when LLVM inlines it. A function that Kotlin inlines has none. Inlining
+three small functions made lookups 25% faster.
 
 The lock gained a short wait before sleeping. It is what turned 9.1 into 82.8 with two threads.
-Against a `pthread_mutex` measured in the same run, `ReentrantLock` went from 0.82, 0.17, 1.61
-and 2.13 times its throughput with 1, 2, 4 and 8 threads, to 1.11, 1.43, 1.55 and 2.84 times.
+Against a `pthread_mutex` measured in the same run, `ReentrantLock` went from 0.82, 0.17, 1.61 and
+2.13 times its throughput with 1, 2, 4 and 8 threads, to 1.11, 1.43, 1.55 and 2.84 times.
 
-The read lock was first ported as it is in the JDK. Two changes then made it 2 to 3 times
-faster with several readers: 23.1, 27.1 and 22.5 million pairs per second with 2, 4 and 8
-threads, against 11.5, 8.6 and 7.0. The [design notes](design.md#reentrantreadwritelock) tell
-what they are.
-
-The read-write lock, the semaphore and the latch then gained from the other side of the frame
-finding. The references of a function that Kotlin inlines join the frame of its caller, which
-is cleared at each call. The queue of the locks is such a function. Each of these classes now
-waits in a function of its own, so only a call that waits clears the references of the queue.
-With one thread the write lock went from 91.1 to 108.6 million pairs per second, and the read
-lock from 87.2 to 104.3. The two programs ran in turn in the same session.
-
-Other parts were measured once, with probes that are not in the tree.
+Other operations were measured once, before and after their optimization.
 
 | Operation | Before | After |
 |---|---:|---:|
@@ -296,3 +389,95 @@ Other parts were measured once, with probes that are not in the tree.
 | `ThreadLocal.set` | 17.6 ns | 8.1 ns |
 | `Semaphore.acquire` and `release` | 86.9 M/s | 108.9 M/s |
 | `CountDownLatch.await` on an open latch | 154 M/s | 391 M/s |
+
+### The locks
+
+- **The read lock** was first ported as it is in the JDK. Not caching the last reader, and releasing
+  a hold with one atomic addition, made it 2 to 3 times faster with several readers: 23.1, 27.1 and
+  22.5 million pairs per second with 2, 4 and 8 threads, against 11.5, 8.6 and 7.0.
+- **A wait in a function of its own.** The references of a function that Kotlin inlines join the
+  frame of its caller, which is cleared at each call. The queue of the locks is such a function.
+  Since each class waits in a function of its own, only a call that waits clears those references.
+  With one thread the write lock went from 91.1 to 108.6 million pairs per second, and the read lock
+  from 87.2 to 104.3. The JIT of the JVM prefers the wait in place, by 8% to 13%.
+- **The fair mode** had to cost the locks that are not fair as little as possible. A flag read
+  before the update of the state cost two readers 22%, then 30% once the lock had a queue, and the
+  plain lock 9% with four threads. One more volatile read of the head cost the write lock 4%. With
+  16 instructions more in `unlock`, LLVM stopped inlining it, and the plain lock lost 5% to 13%. A
+  lock 8 bytes bigger lost 3% to 7% with 2 and 4 threads. With a fair lock told by its class, the
+  plain lock is 0.3% to 0.6% below what it was, the write lock about 2%, and the read lock 3% once
+  it has a queue.
+- **The first fence of the stamped lock** takes a quarter of the speed of an optimistic read: 526
+  million reads and validations per second with one thread, against 696 without. An atomic addition
+  or an exchange on its cell costs a little more than the write, 490 and 482, and a compare-and-set
+  twice as much, 265.
+
+### The queues
+
+Outside the JVM and Android the queues that never wait are a ring under one lock, because that is
+what was the fastest there. Millions of pairs of `offer` and `poll` per second:
+
+| | 1 thread | 2 threads | 4 threads | 8 threads |
+|---|---:|---:|---:|---:|
+| The algorithm of JSR-166, an atomic reference for each field | 43 | 5.7 | 7.2 | 6.8 |
+| The same, a node being one atomic array | 41 | 5.9 | 7.5 | 6.6 |
+| Two locks on linked nodes | 81 | 7.9 | 5.5 | 28 |
+| One lock on the `ArrayDeque` of the standard library | 57 | 22 | 25 | 27 |
+| One lock on a ring of its own | 93 | 37 | 32 | 39 |
+
+The ring of the last row took the lock port directly. Through the public lock it did 62 with one
+thread. With its work split in three functions that called each other, the queue did 46, against 81
+written in place.
+
+The blocking queues take their lock without a call as well. They went through the public
+`ReentrantLock` at first, which is one call more for each lock and unlock. The same program ran
+before and after that change, in turn, and the queues did this much more or less:
+
+| Queue | 1 thread | 2 threads | 4 threads | 8 threads |
+|---|---:|---:|---:|---:|
+| `ArrayBlockingQueue` | +23% | +16% | -1% | +21% |
+| `LinkedBlockingQueue` | +25% | +35% | -23% | +59% |
+| `LinkedBlockingDeque` | +3% | -13% | -3% | -2% |
+
+One thread gains the calls. Several threads wait with the same code as before, so only the timing
+changed, and it goes both ways.
+
+### The sorted map
+
+With every operation under its lock, the sorted map got slower with each thread that joined. Reading
+an entry without the lock changed that. Millions of operations per second, when nine operations in
+ten are a `get` and the others add or remove a key:
+
+| Keys | Threads | Every operation under the lock | Reads without the lock |
+|---:|---:|---:|---:|
+| 1 000 | 1 | 19.0 | 18.5 |
+| 1 000 | 2 | 13.4 | 20.0 |
+| 1 000 | 4 | 11.5 | 20.6 |
+| 1 000 | 8 | 11.2 | 13.7 |
+| 1 000 000 | 1 | 2.44 | 2.43 |
+| 1 000 000 | 2 | 1.47 | 4.35 |
+| 1 000 000 | 4 | 1.45 | 6.95 |
+| 1 000 000 | 8 | 1.45 | 7.82 |
+
+The first column is one run, and the second one the median of three. One thread alone pays nothing
+for the reads without the lock. The reads lose where they are not the rule: when half of the
+operations change a small map, four to eight threads do 8% to 17% less than under the lock.
+
+### What did not pay
+
+Each of these was measured and dropped.
+
+- **Lock words further apart in the map.** Neighbouring bins share the cache line of their lock
+  words. One word per line changed nothing at 8 threads beyond noise, and slowed inserts on one
+  thread by 8% to 47%, as the table grows with it.
+- **Fewer lock words on a large table**, shared by the bins. No gain beyond noise. The processor
+  fetches the lock word and the bin at once.
+- **A lookup without the lock before `remove` and `replace`.** It made removals of absent keys 3.8
+  times faster at 8 threads, and removals of present keys 21% slower. A key is usually present when
+  it is removed.
+- **Keeping the wait of a lock out of line** with `kotlin.native.NoInline`. No gain. That mark only
+  stops the inliner of Kotlin, and LLVM still inlines a function that has one caller.
+- **A release that looks past the nodes that gave up.** One more read on that path took 4% to 8%
+  from a `ReentrantLock` that 2 to 8 threads fight for. A signal repairs the queue instead.
+- **The state of a lock in the lock itself**, out of the class of the queue. Only the place of the
+  field in the object changed, and `ReentrantLock` lost 7% to 12% with four threads.

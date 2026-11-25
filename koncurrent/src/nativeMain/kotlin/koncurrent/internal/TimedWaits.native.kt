@@ -22,8 +22,16 @@
 package koncurrent.internal
 
 import koncurrent.CountDownLatch
+import koncurrent.CyclicBarrier
 import koncurrent.Semaphore
+import koncurrent.locks.StampedLock
 
 internal actual fun Semaphore.tryAcquireWithin(nanos: Long): Boolean = tryAcquire(nanos)
 
 internal actual fun CountDownLatch.awaitWithin(nanos: Long): Boolean = await(nanos)
+
+internal actual fun CyclicBarrier.awaitWithin(nanos: Long): Int = await(nanos)
+
+internal actual fun StampedLock.tryWriteLockWithin(nanos: Long): Long = tryWriteLock(nanos)
+
+internal actual fun StampedLock.tryReadLockWithin(nanos: Long): Long = tryReadLock(nanos)

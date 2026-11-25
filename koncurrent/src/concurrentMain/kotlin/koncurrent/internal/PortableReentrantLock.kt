@@ -38,18 +38,30 @@ internal const val LOCK_FREE = 0
 internal const val LOCK_HELD = 1
 
 /**
- * The non-fair `ReentrantLock` of JSR-166 in common Kotlin. It backs the public lock where the
- * platform has none.
+ * The `ReentrantLock` of JSR-166 in common Kotlin. It backs the public lock where the platform
+ * has none.
  *
  * The state is [LOCK_HELD] while a thread owns the lock. A thread that asks for a free lock
- * takes it, even when other threads wait in the queue.
+ * takes it, even when other threads wait in the queue, unless the lock is [fair].
+ *
+ * A fair lock goes to the thread that has waited for the longest. A thread joins the queue as
+ * soon as it finds the lock taken or the queue in use, where it first tries a few times for a
+ * lock that is not fair. Those tries would make it lose its turn.
+ *
+ * A fair lock is told by its class, [FairPortableReentrantLock], and not by a field. A field
+ * would sit next to the owner and its holds, which every thread that takes the lock writes. A
+ * thread that reads it before it updates the state then waits for the memory that the last
+ * owner wrote. The class is read from the header of the object, which no thread writes, and
+ * the lock keeps the size that it had.
  *
  * The original counts the holds of the owner in the state. Only the owner reads and writes that
  * count, so it is a plain field here. This spares two atomic accesses for each hold.
  *
  * The functions that take and release the lock are inline, for the class that wraps this one.
+ * `unlock` is small enough for LLVM to inline it into its callers in turn, which it stops doing
+ * for a few instructions more.
  */
-internal class PortableReentrantLock : Synchronizer() {
+internal open class PortableReentrantLock : Synchronizer() {
 
     // Not volatile. A thread only needs to tell whether it is the owner, and it always reads
     // its own write.
@@ -58,10 +70,13 @@ internal class PortableReentrantLock : Synchronizer() {
     // Only accessed by the owner
     var holds = 0
 
+    val fair: Boolean
+        get() = this is FairPortableReentrantLock
+
     inline fun lock() {
         val current = currentThreadId()
 
-        if (state.compareAndSet(LOCK_FREE, LOCK_HELD)) {
+        if (!fair && state.compareAndSet(LOCK_FREE, LOCK_HELD)) {
             owner = current
             holds = 1
         } else {
@@ -96,8 +111,17 @@ internal class PortableReentrantLock : Synchronizer() {
     fun lockContended(current: Int) {
         if (owner == current) {
             val _ = hold()
-        } else {
+        } else if (!fair) {
             acquire(shared = false, interruptible = false) { tryAcquire(current) }
+        } else if (!tryAcquireInTurn(current)) {
+            lockInTurn(current)
+        }
+    }
+
+    // Apart from lockContended on purpose. Synchronizer.acquire tells why.
+    private fun lockInTurn(current: Int) {
+        val _ = acquireQueued(null, shared = false, interruptible = false, timed = false, 0L) {
+            tryAcquireInTurn(current)
         }
     }
 
@@ -110,7 +134,7 @@ internal class PortableReentrantLock : Synchronizer() {
             throw InterruptedException()
         }
 
-        if (!tryLock()) {
+        if (!tryLockInTurn()) {
             val _ = acquireOrGiveUp(timed = false, deadline = 0L)
         }
     }
@@ -124,14 +148,27 @@ internal class PortableReentrantLock : Synchronizer() {
             throw InterruptedException()
         }
 
-        return tryLock() || (nanos > 0L && acquireOrGiveUp(timed = true, deadlineAfter(nanos)))
+        return tryLockInTurn() ||
+            (nanos > 0L && acquireOrGiveUp(timed = true, deadlineAfter(nanos)))
+    }
+
+    // The first try of a thread that may then wait. It does not take a fair lock past the
+    // threads that wait for it, which `tryLock` does.
+    private fun tryLockInTurn(): Boolean {
+        if (!fair) {
+            return tryLock()
+        }
+
+        val current = currentThreadId()
+
+        return if (owner == current) hold() else tryAcquireInTurn(current)
     }
 
     private fun acquireOrGiveUp(timed: Boolean, deadline: Long): Boolean {
         val current = currentThreadId()
 
         return acquireQueued(null, shared = false, interruptible = true, timed, deadline) {
-            tryAcquire(current)
+            tryAcquireInTurn(current)
         }
     }
 
@@ -153,6 +190,17 @@ internal class PortableReentrantLock : Synchronizer() {
         }
 
         return false
+    }
+
+    // Takes the lock if it is free, unless the lock is fair and another thread has waited for
+    // it longer. The queue is read once the lock is seen free, as in the original. A thread
+    // that joined the queue while the lock was held is then never missed.
+    private fun tryAcquireInTurn(current: Int): Boolean {
+        if (fair && (state.load() != LOCK_FREE || hasQueuedPredecessors())) {
+            return false
+        }
+
+        return tryAcquire(current)
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -186,12 +234,17 @@ internal class PortableReentrantLock : Synchronizer() {
             interruptible = false,
             timed = false,
             deadline = 0L,
-            tryAcquire = { tryAcquire(current) },
+            tryAcquire = { tryAcquireInTurn(current) },
         )
 
         holds = released
     }
 }
+
+/**
+ * A [PortableReentrantLock] that is fair.
+ */
+internal class FairPortableReentrantLock : PortableReentrantLock()
 
 /**
  * A condition of a [PortableReentrantLock], which is the `ConditionObject` of JSR-166. A thread

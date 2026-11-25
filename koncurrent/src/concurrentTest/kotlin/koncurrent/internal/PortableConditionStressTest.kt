@@ -31,21 +31,28 @@ import koncurrent.locks.TestConditionLock
  */
 class PortableConditionStressTest : ConditionContractTest() {
 
-    override fun newLock(): TestConditionLock {
-        val lock = PortableReentrantLock()
-
-        return TestConditionLock(
-            lock = lock.asTestLock(),
-            newCondition = {
-                val condition = lock.newCondition()
-
-                TestCondition(
-                    await = condition::await,
-                    awaitFor = { condition.await(it.inWholeNanoseconds) },
-                    signal = condition::signal,
-                    signalAll = condition::signalAll,
-                )
-            },
-        )
-    }
+    override fun newLock(): TestConditionLock = PortableReentrantLock().asTestConditionLock()
 }
+
+/**
+ * Tests the conditions of the fair [PortableReentrantLock] on real threads.
+ */
+class PortableFairConditionStressTest : ConditionContractTest() {
+
+    override fun newLock(): TestConditionLock =
+        FairPortableReentrantLock().asTestConditionLock()
+}
+
+private fun PortableReentrantLock.asTestConditionLock(): TestConditionLock = TestConditionLock(
+    lock = asTestLock(),
+    newCondition = {
+        val condition = newCondition()
+
+        TestCondition(
+            await = condition::await,
+            awaitFor = { condition.await(it.inWholeNanoseconds) },
+            signal = condition::signal,
+            signalAll = condition::signalAll,
+        )
+    },
+)

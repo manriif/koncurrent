@@ -37,9 +37,10 @@ private const val BRIEF_NANOS = 1L
  * Checks with Lincheck that [PortableReentrantLock] excludes threads from each other and never
  * leaves one waiting. The counter is a plain field, so a lost exclusion loses an increment.
  */
-class PortableReentrantLockLinearizabilityTest {
+abstract class ReentrantLockLinearizabilityTest internal constructor(
+    private val lock: PortableReentrantLock,
+) {
 
-    private val lock = PortableReentrantLock()
     private var counter = 0
 
     @Operation
@@ -87,7 +88,7 @@ class PortableReentrantLockLinearizabilityTest {
     // Lets Lincheck tell that two sequential executions reached the same state
 
     override fun equals(other: Any?): Boolean =
-        other is PortableReentrantLockLinearizabilityTest && other.counter == counter
+        other is ReentrantLockLinearizabilityTest && other.counter == counter
 
     override fun hashCode(): Int = counter
 
@@ -108,3 +109,12 @@ class PortableReentrantLockLinearizabilityTest {
             .check(this::class)
     }
 }
+
+class PortableReentrantLockLinearizabilityTest :
+    ReentrantLockLinearizabilityTest(PortableReentrantLock())
+
+/**
+ * Checks the lock when it is fair. Its threads look at the queue before they take it.
+ */
+class PortableFairReentrantLockLinearizabilityTest :
+    ReentrantLockLinearizabilityTest(FairPortableReentrantLock())

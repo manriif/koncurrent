@@ -71,6 +71,21 @@ internal class TestReadWriteLock(
 )
 
 /**
+ * Returns a public [lock] as a read-write lock under test.
+ */
+internal fun TestReadWriteLock(lock: ReentrantReadWriteLock): TestReadWriteLock {
+    val read: Lock = lock.readLock()
+    val write: Lock = lock.writeLock()
+
+    return TestReadWriteLock(
+        read = TestLock(read),
+        write = TestLock(write),
+        readHoldCount = { lock.getReadHoldCount() },
+        writeHoldCount = { lock.getWriteHoldCount() },
+    )
+}
+
+/**
  * Tests what several threads see of a reentrant read-write lock.
  */
 abstract class ReadWriteLockContractTest {
@@ -681,16 +696,13 @@ abstract class ReadWriteLockContractTest {
  */
 class ReentrantReadWriteLockStressTest : ReadWriteLockContractTest() {
 
-    override fun newLock(): TestReadWriteLock {
-        val lock = ReentrantReadWriteLock()
-        val read: Lock = lock.readLock()
-        val write: Lock = lock.writeLock()
+    override fun newLock(): TestReadWriteLock = TestReadWriteLock(ReentrantReadWriteLock())
+}
 
-        return TestReadWriteLock(
-            read = TestLock(read),
-            write = TestLock(write),
-            readHoldCount = { lock.getReadHoldCount() },
-            writeHoldCount = { lock.getWriteHoldCount() },
-        )
-    }
+/**
+ * Tests the public [ReentrantReadWriteLock] on real threads when it is fair.
+ */
+class FairReentrantReadWriteLockStressTest : ReadWriteLockContractTest() {
+
+    override fun newLock(): TestReadWriteLock = TestReadWriteLock(ReentrantReadWriteLock(true))
 }

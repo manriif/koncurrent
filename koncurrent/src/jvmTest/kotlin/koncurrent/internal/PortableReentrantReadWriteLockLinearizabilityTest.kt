@@ -38,9 +38,10 @@ private const val BRIEF_NANOS = 1L
  * leaves a thread waiting. The counter is a plain field, so a writer that is not alone loses an
  * increment, and a reader that is not kept from a writer may see two values.
  */
-class PortableReentrantReadWriteLockLinearizabilityTest {
+abstract class ReentrantReadWriteLockLinearizabilityTest internal constructor(
+    private val lock: PortableReentrantReadWriteLock,
+) {
 
-    private val lock = PortableReentrantReadWriteLock()
     private var counter = 0
 
     @Operation
@@ -129,7 +130,7 @@ class PortableReentrantReadWriteLockLinearizabilityTest {
     // Lets Lincheck tell that two sequential executions reached the same state
 
     override fun equals(other: Any?): Boolean =
-        other is PortableReentrantReadWriteLockLinearizabilityTest && other.counter == counter
+        other is ReentrantReadWriteLockLinearizabilityTest && other.counter == counter
 
     override fun hashCode(): Int = counter
 
@@ -150,3 +151,12 @@ class PortableReentrantReadWriteLockLinearizabilityTest {
             .check(this::class)
     }
 }
+
+class PortableReentrantReadWriteLockLinearizabilityTest :
+    ReentrantReadWriteLockLinearizabilityTest(PortableReentrantReadWriteLock())
+
+/**
+ * Checks the lock when it is fair. Its threads look at the queue before they take it.
+ */
+class PortableFairReentrantReadWriteLockLinearizabilityTest :
+    ReentrantReadWriteLockLinearizabilityTest(FairPortableReentrantReadWriteLock())

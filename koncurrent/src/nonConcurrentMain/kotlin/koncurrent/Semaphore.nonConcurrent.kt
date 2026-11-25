@@ -24,7 +24,12 @@ package koncurrent
 import koncurrent.internal.ENDLESS_WAIT
 
 // JS and Wasm have one thread, so a plain count is enough
-public actual class Semaphore actual constructor(private var permits: Int) {
+public actual class Semaphore actual constructor(
+    private var permits: Int,
+    private val fair: Boolean,
+) {
+
+    public actual constructor(permits: Int) : this(permits, false)
 
     // No other thread could release, so the wait would never end
     public actual fun acquire() {
@@ -49,4 +54,6 @@ public actual class Semaphore actual constructor(private var permits: Int) {
     }
 
     public actual fun availablePermits(): Int = permits
+
+    public actual fun isFair(): Boolean = fair
 }

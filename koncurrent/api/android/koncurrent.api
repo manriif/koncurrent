@@ -1,3 +1,15 @@
+public final class koncurrent/BlockingDequeKt {
+	public static final fun offerFirst-SxA4cEA (Ljava/util/concurrent/BlockingDeque;Ljava/lang/Object;J)Z
+	public static final fun offerLast-SxA4cEA (Ljava/util/concurrent/BlockingDeque;Ljava/lang/Object;J)Z
+	public static final fun pollFirst-HG0u8IE (Ljava/util/concurrent/BlockingDeque;J)Ljava/lang/Object;
+	public static final fun pollLast-HG0u8IE (Ljava/util/concurrent/BlockingDeque;J)Ljava/lang/Object;
+}
+
+public final class koncurrent/BlockingQueueKt {
+	public static final fun offer-SxA4cEA (Ljava/util/concurrent/BlockingQueue;Ljava/lang/Object;J)Z
+	public static final fun poll-HG0u8IE (Ljava/util/concurrent/BlockingQueue;J)Ljava/lang/Object;
+}
+
 public final class koncurrent/ConcurrentHashMap : java/util/Map, kotlin/jvm/internal/markers/KMutableMap {
 	public fun <init> (I)V
 	public fun clear ()V
@@ -83,6 +95,10 @@ public final class koncurrent/CountDownLatchKt {
 	public static final fun await-HG0u8IE (Ljava/util/concurrent/CountDownLatch;J)Z
 }
 
+public final class koncurrent/CyclicBarrierKt {
+	public static final fun await-HG0u8IE (Ljava/util/concurrent/CyclicBarrier;J)I
+}
+
 public abstract interface annotation class koncurrent/InternalForInheritanceKoncurrentApi : java/lang/annotation/Annotation {
 }
 
@@ -116,5 +132,37 @@ public final class koncurrent/locks/LockKt {
 public final class koncurrent/locks/ReentrantReadWriteLockKt {
 	public static final fun read (Ljava/util/concurrent/locks/ReentrantReadWriteLock;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
 	public static final fun write (Ljava/util/concurrent/locks/ReentrantReadWriteLock;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+}
+
+public final class koncurrent/locks/StampedLock {
+	public final fun asReadLock ()Ljava/util/concurrent/locks/Lock;
+	public final fun asReadWriteLock ()Ljava/util/concurrent/locks/ReadWriteLock;
+	public final fun asWriteLock ()Ljava/util/concurrent/locks/Lock;
+	public final fun getReadLockCount ()I
+	public final fun isReadLocked ()Z
+	public final fun isWriteLocked ()Z
+	public final fun readLock ()J
+	public final fun readLockInterruptibly ()J
+	public final fun tryConvertToOptimisticRead (J)J
+	public final fun tryConvertToReadLock (J)J
+	public final fun tryConvertToWriteLock (J)J
+	public final fun tryOptimisticRead ()J
+	public final fun tryReadLock ()J
+	public final fun tryUnlockRead ()Z
+	public final fun tryUnlockWrite ()Z
+	public final fun tryWriteLock ()J
+	public final fun unlock (J)V
+	public final fun unlockRead (J)V
+	public final fun unlockWrite (J)V
+	public final fun validate (J)Z
+	public final fun writeLock ()J
+	public final fun writeLockInterruptibly ()J
+}
+
+public final class koncurrent/locks/StampedLockKt {
+	public static final fun read (Lkoncurrent/locks/StampedLock;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+	public static final fun tryReadLock-HG0u8IE (Lkoncurrent/locks/StampedLock;J)J
+	public static final fun tryWriteLock-HG0u8IE (Lkoncurrent/locks/StampedLock;J)J
+	public static final fun write (Lkoncurrent/locks/StampedLock;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
 }
 

@@ -21,9 +21,13 @@
  */
 package koncurrent
 
+import koncurrent.locks.StampedLock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Tests the waits that could never end on a platform with one thread. They fail instead.
@@ -43,5 +47,45 @@ class SingleThreadWaitsTest {
         val latch = CountDownLatch(1)
 
         assertFailsWith<IllegalStateException> { latch.await() }
+    }
+
+    @Test
+    fun awaitFailsAtABarrierOfSeveralParties() {
+        val barrier = CyclicBarrier(2)
+
+        assertFailsWith<IllegalStateException> { barrier.await() }
+        assertFalse(barrier.isBroken())
+    }
+
+    @Test
+    fun timedAwaitRunsOutOfTimeAtABarrierOfSeveralParties() {
+        val barrier = CyclicBarrier(2)
+
+        assertFailsWith<TimeoutException> { barrier.await(1.seconds) }
+        assertTrue(barrier.isBroken())
+
+        assertFailsWith<BrokenBarrierException> { barrier.await() }
+    }
+
+    @Test
+    fun stampedLockFailsWhereItWouldWait() {
+        val lock = StampedLock()
+        val read = lock.readLock()
+
+        assertFailsWith<IllegalStateException> { lock.writeLock() }
+        assertFailsWith<IllegalStateException> { lock.writeLockInterruptibly() }
+        assertEquals(1, lock.getReadLockCount())
+        assertFalse(lock.isWriteLocked())
+
+        lock.unlockRead(read)
+
+        val write = lock.writeLock()
+
+        assertFailsWith<IllegalStateException> { lock.readLock() }
+        assertFailsWith<IllegalStateException> { lock.readLockInterruptibly() }
+        assertFailsWith<IllegalStateException> { lock.writeLock() }
+        assertEquals(0, lock.getReadLockCount())
+
+        lock.unlockWrite(write)
     }
 }
