@@ -79,6 +79,9 @@ too.
 - **Keep the algorithm.** A change of the algorithm must be measured, and explained in
   [docs/design.md](docs/design.md).
 - **Say where a port differs** from the original, in the comment of the class.
+- **Say where a file comes from**, in a note under its license header, as the ports do. A port
+  names the class of JSR-166 that it is ported from. A class that is written from scratch for
+  the reason above says so.
 
 ## Tests
 

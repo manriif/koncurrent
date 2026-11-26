@@ -19,8 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/*
+ * Ported from the LinkedBlockingDeque of JSR-166, which was written by Doug Lea with assistance
+ * from members of JCP JSR-166 Expert Group and released to the public domain, as explained at
+ * http://creativecommons.org/publicdomain/zero/1.0/
+ */
 package koncurrent.internal
-
 
 /**
  * A blocking deque on doubly linked nodes, a port of the `LinkedBlockingDeque` of JSR-166. It

@@ -19,6 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/*
+ * Written for this library. It is not a port: the CopyOnWriteArrayList of JSR-166 carries a Sun
+ * copyright, where the classes that are ported are in the public domain.
+ */
+
 // Kotlin/Native gives each function its own frame of GC roots, even where LLVM inlines it. The
 // small functions of the hot paths are inlined by Kotlin, which merges their frames.
 @file:Suppress("NOTHING_TO_INLINE")
