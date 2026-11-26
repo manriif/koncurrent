@@ -21,7 +21,10 @@
  */
 package koncurrent.internal
 
+import koncurrent.BlockingDeque
+import koncurrent.BlockingQueue
 import koncurrent.CountDownLatch
+import koncurrent.CyclicBarrier
 import koncurrent.Semaphore
 import koncurrent.locks.Condition
 import koncurrent.locks.Lock
@@ -38,3 +41,24 @@ internal actual fun Semaphore.tryAcquireWithin(nanos: Long): Boolean =
 
 internal actual fun CountDownLatch.awaitWithin(nanos: Long): Boolean =
     await(nanos, TimeUnit.NANOSECONDS)
+
+internal actual fun CyclicBarrier.awaitWithin(nanos: Long): Int =
+    await(nanos, TimeUnit.NANOSECONDS)
+
+internal actual fun <E : Any> BlockingQueue<E>.offerWithin(element: E, nanos: Long): Boolean =
+    offer(element, nanos, TimeUnit.NANOSECONDS)
+
+internal actual fun <E : Any> BlockingQueue<E>.pollWithin(nanos: Long): E? =
+    poll(nanos, TimeUnit.NANOSECONDS)
+
+internal actual fun <E : Any> BlockingDeque<E>.offerFirstWithin(element: E, nanos: Long): Boolean =
+    offerFirst(element, nanos, TimeUnit.NANOSECONDS)
+
+internal actual fun <E : Any> BlockingDeque<E>.offerLastWithin(element: E, nanos: Long): Boolean =
+    offerLast(element, nanos, TimeUnit.NANOSECONDS)
+
+internal actual fun <E : Any> BlockingDeque<E>.pollFirstWithin(nanos: Long): E? =
+    pollFirst(nanos, TimeUnit.NANOSECONDS)
+
+internal actual fun <E : Any> BlockingDeque<E>.pollLastWithin(nanos: Long): E? =
+    pollLast(nanos, TimeUnit.NANOSECONDS)

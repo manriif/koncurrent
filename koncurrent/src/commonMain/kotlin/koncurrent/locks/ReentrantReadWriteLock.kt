@@ -39,9 +39,10 @@ import kotlin.contracts.contract
  * lock must release it before it takes the write lock, or it waits for itself forever. [write]
  * does that for its caller.
  *
- * The lock is not fair. A thread that asks for a free lock takes it, even when other threads
- * wait. One rule keeps writers from starving. A thread that does not read yet lets a waiting
- * writer pass first.
+ * The lock is not fair unless it is created so. A thread that asks for a free lock then takes
+ * it, even when other threads wait. One rule keeps writers from starving. A thread that does
+ * not read yet lets a waiting writer pass first. A fair lock goes to the threads in the order
+ * of their arrival, which is slower when many threads take it.
  *
  * ### Platforms
  *
@@ -51,17 +52,22 @@ import kotlin.contracts.contract
  *   Taking the write lock while holding only the read lock throws [IllegalStateException],
  *   since it could never succeed.
  */
-public expect class ReentrantReadWriteLock() {
+public expect class ReentrantReadWriteLock() : ReadWriteLock {
+
+    /**
+     * Creates a lock that is [fair] or not.
+     */
+    public constructor(fair: Boolean)
 
     /**
      * Returns the lock used for reading. Many threads hold it at once.
      */
-    public fun readLock(): ReadLock
+    override fun readLock(): ReadLock
 
     /**
      * Returns the lock used for writing. One thread holds it, while no other thread reads.
      */
-    public fun writeLock(): WriteLock
+    override fun writeLock(): WriteLock
 
     /**
      * Returns the number of holds that the current thread has on the read lock.
@@ -72,6 +78,11 @@ public expect class ReentrantReadWriteLock() {
      * Returns the number of holds that the current thread has on the write lock.
      */
     public fun getWriteHoldCount(): Int
+
+    /**
+     * Tells whether this lock is fair.
+     */
+    public fun isFair(): Boolean
 
     /**
      * The lock returned by [ReentrantReadWriteLock.readLock]. Common code cannot name this

@@ -31,18 +31,26 @@ import koncurrent.TestSemaphore
  */
 class PortableSemaphoreStressTest : SemaphoreContractTest() {
 
-    override fun newSemaphore(permits: Int): TestSemaphore {
-        val semaphore = PortableSemaphore(permits)
-
-        return TestSemaphore(
-            acquire = semaphore::acquire,
-            tryAcquire = semaphore::tryAcquire,
-            tryAcquireFor = { semaphore.tryAcquire(it.inWholeNanoseconds) },
-            release = semaphore::release,
-            availablePermits = semaphore::availablePermits,
-        )
-    }
+    override fun newSemaphore(permits: Int): TestSemaphore =
+        PortableSemaphore(permits).asTestSemaphore()
 }
+
+/**
+ * Tests the fair [PortableSemaphore] on real threads.
+ */
+class PortableFairSemaphoreStressTest : SemaphoreContractTest() {
+
+    override fun newSemaphore(permits: Int): TestSemaphore =
+        PortableSemaphore(permits, fair = true).asTestSemaphore()
+}
+
+internal fun PortableSemaphore.asTestSemaphore(): TestSemaphore = TestSemaphore(
+    acquire = ::acquire,
+    tryAcquire = ::tryAcquire,
+    tryAcquireFor = { tryAcquire(it.inWholeNanoseconds) },
+    release = ::release,
+    availablePermits = ::availablePermits,
+)
 
 /**
  * Tests [PortableCountDownLatch] on real threads, on the JVM too where it backs nothing.

@@ -87,6 +87,23 @@ internal class TestConditionLock(
 )
 
 /**
+ * Returns a public [lock] as a lock under test with its conditions.
+ */
+internal fun TestConditionLock(lock: ReentrantLock): TestConditionLock = TestConditionLock(
+    lock = TestLock(lock),
+    newCondition = {
+        val condition = lock.newCondition()
+
+        TestCondition(
+            await = { condition.await() },
+            awaitFor = { condition.await(it) },
+            signal = { condition.signal() },
+            signalAll = { condition.signalAll() },
+        )
+    },
+)
+
+/**
  * Tests what several threads see of the conditions of a reentrant lock.
  */
 abstract class ConditionContractTest {
@@ -676,21 +693,13 @@ abstract class ConditionContractTest {
  */
 class ConditionStressTest : ConditionContractTest() {
 
-    override fun newLock(): TestConditionLock {
-        val lock = ReentrantLock()
+    override fun newLock(): TestConditionLock = TestConditionLock(ReentrantLock())
+}
 
-        return TestConditionLock(
-            lock = TestLock(lock),
-            newCondition = {
-                val condition = lock.newCondition()
+/**
+ * Tests the conditions of the public [ReentrantLock] on real threads when it is fair.
+ */
+class FairConditionStressTest : ConditionContractTest() {
 
-                TestCondition(
-                    await = { condition.await() },
-                    awaitFor = { condition.await(it) },
-                    signal = { condition.signal() },
-                    signalAll = { condition.signalAll() },
-                )
-            },
-        )
-    }
+    override fun newLock(): TestConditionLock = TestConditionLock(ReentrantLock(true))
 }

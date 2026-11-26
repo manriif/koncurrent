@@ -63,6 +63,17 @@ internal class TestSemaphore(
 )
 
 /**
+ * Returns a public [semaphore] as a semaphore under test.
+ */
+internal fun TestSemaphore(semaphore: Semaphore): TestSemaphore = TestSemaphore(
+    acquire = { semaphore.acquire() },
+    tryAcquire = { semaphore.tryAcquire() },
+    tryAcquireFor = { semaphore.tryAcquire(it) },
+    release = { semaphore.release() },
+    availablePermits = { semaphore.availablePermits() },
+)
+
+/**
  * Tests what several threads see of a semaphore.
  */
 abstract class SemaphoreContractTest {
@@ -346,15 +357,14 @@ abstract class SemaphoreContractTest {
  */
 class SemaphoreStressTest : SemaphoreContractTest() {
 
-    override fun newSemaphore(permits: Int): TestSemaphore {
-        val semaphore = Semaphore(permits)
+    override fun newSemaphore(permits: Int): TestSemaphore = TestSemaphore(Semaphore(permits))
+}
 
-        return TestSemaphore(
-            acquire = { semaphore.acquire() },
-            tryAcquire = { semaphore.tryAcquire() },
-            tryAcquireFor = { semaphore.tryAcquire(it) },
-            release = { semaphore.release() },
-            availablePermits = { semaphore.availablePermits() },
-        )
-    }
+/**
+ * Tests the public [Semaphore] on real threads when it is fair.
+ */
+class FairSemaphoreStressTest : SemaphoreContractTest() {
+
+    override fun newSemaphore(permits: Int): TestSemaphore =
+        TestSemaphore(Semaphore(permits, true))
 }

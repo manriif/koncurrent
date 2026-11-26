@@ -32,6 +32,14 @@ class PortableReentrantLockStressTest : LockContractTest() {
     override fun newLock(): TestLock = PortableReentrantLock().asTestLock()
 }
 
+/**
+ * Tests the fair [PortableReentrantLock] on real threads.
+ */
+class PortableFairReentrantLockStressTest : LockContractTest() {
+
+    override fun newLock(): TestLock = FairPortableReentrantLock().asTestLock()
+}
+
 internal fun PortableReentrantLock.asTestLock(): TestLock = TestLock(
     lock = ::lock,
     lockInterruptibly = ::lockInterruptibly,

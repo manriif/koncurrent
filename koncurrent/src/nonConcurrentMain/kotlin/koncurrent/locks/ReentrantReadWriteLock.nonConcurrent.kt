@@ -26,7 +26,9 @@ import koncurrent.internal.WRITE_LOCK_NOT_HELD
 
 // JS and Wasm have one thread, which never waits. The holds are counted so that the locks fail
 // where they do on the other platforms.
-public actual class ReentrantReadWriteLock {
+public actual class ReentrantReadWriteLock actual constructor(
+    private val fair: Boolean,
+) : ReadWriteLock {
 
     private var readHolds = 0
     private var writeHolds = 0
@@ -34,13 +36,17 @@ public actual class ReentrantReadWriteLock {
     private val readLock = ReadLock(this)
     private val writeLock = WriteLock(this)
 
-    public actual fun readLock(): ReadLock = readLock
+    public actual constructor() : this(false)
 
-    public actual fun writeLock(): WriteLock = writeLock
+    actual override fun readLock(): ReadLock = readLock
+
+    actual override fun writeLock(): WriteLock = writeLock
 
     public actual fun getReadHoldCount(): Int = readHolds
 
     public actual fun getWriteHoldCount(): Int = writeHolds
+
+    public actual fun isFair(): Boolean = fair
 
     public actual class ReadLock internal constructor(
         private val locks: ReentrantReadWriteLock,

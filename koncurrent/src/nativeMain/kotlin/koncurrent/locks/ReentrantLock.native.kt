@@ -21,13 +21,16 @@
  */
 package koncurrent.locks
 
+import koncurrent.internal.FairPortableReentrantLock
 import koncurrent.internal.NativeCondition
 import koncurrent.internal.PortableReentrantLock
 import kotlin.time.Duration
 
-public actual class ReentrantLock : Lock {
+public actual class ReentrantLock actual constructor(fair: Boolean) : Lock {
 
-    private val lock = PortableReentrantLock()
+    private val lock = if (fair) FairPortableReentrantLock() else PortableReentrantLock()
+
+    public actual constructor() : this(false)
 
     actual override fun lock(): Unit = lock.lock()
 
@@ -40,4 +43,6 @@ public actual class ReentrantLock : Lock {
     actual override fun unlock(): Unit = lock.unlock()
 
     public actual fun newCondition(): Condition = NativeCondition(lock.newCondition())
+
+    public actual fun isFair(): Boolean = lock.fair
 }

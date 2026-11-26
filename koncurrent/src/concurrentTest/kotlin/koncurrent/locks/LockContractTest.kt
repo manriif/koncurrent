@@ -434,3 +434,11 @@ class ReentrantLockStressTest : LockContractTest() {
 
     override fun newLock(): TestLock = TestLock(ReentrantLock())
 }
+
+/**
+ * Tests the public [ReentrantLock] on real threads when it is fair.
+ */
+class FairReentrantLockStressTest : LockContractTest() {
+
+    override fun newLock(): TestLock = TestLock(ReentrantLock(true))
+}

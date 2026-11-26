@@ -32,8 +32,9 @@ import kotlin.time.Duration
 /**
  * A lock that a thread takes with [lock] and gives back with [unlock].
  *
- * It is the common type of the locks of this package: [ReentrantLock], and the two locks of a
- * [ReentrantReadWriteLock]. Use [withLock] to run code while holding any of them.
+ * It is the common type of the locks of this package: [ReentrantLock], the two locks of a
+ * [ReentrantReadWriteLock], and the views of a [StampedLock]. Use [withLock] to run code while
+ * holding any of them.
  *
  * This interface is not meant to be implemented outside of this library. On the JVM and Android
  * it is `java.util.concurrent.locks.Lock`, which has more functions to implement.

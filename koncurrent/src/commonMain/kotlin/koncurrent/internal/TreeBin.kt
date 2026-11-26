@@ -238,8 +238,11 @@ internal class TreeNode<K : Any, V : Any>(
 ) : Node<K, V>(hash, key, value) {
 
     // Volatile because a writer links a new leaf while lookups search the tree
-    @Volatile var left: TreeNode<K, V>? = null
-    @Volatile var right: TreeNode<K, V>? = null
+    @Volatile
+    var left: TreeNode<K, V>? = null
+
+    @Volatile
+    var right: TreeNode<K, V>? = null
 
     var prev: TreeNode<K, V>? = null // Needed to unlink next upon deletion
     var red = false

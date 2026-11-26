@@ -89,8 +89,13 @@ internal const val BUSY_ROUNDS = 2
  * - A thread that cancels may have been woken up to acquire. Waking up the thread after it
  *   passes that on.
  *
- * Only the thread of a node writes its link to its predecessor, and only that thread links its
- * new predecessor back to it. So no update of a link can be lost.
+ * Only the thread of a node writes its link to its predecessor. The link from a predecessor to
+ * its node has two writers when a signal moves a condition node: the thread that signals, for
+ * the sleeping thread of that node, and the thread behind when it skips the node. The first
+ * write may come last and leave the predecessor linked to a node that gave up, which no
+ * release would wake a thread from. So the thread that signals reads the mark of the node once
+ * it wrote the link, and [links][link] the thread behind in its place. A release does nothing
+ * for it: one more read there was measured to cost a contended lock 5%.
  */
 internal open class Synchronizer {
 
@@ -98,7 +103,8 @@ internal open class Synchronizer {
     val state = AtomicInt(0)
 
     // Null until threads contend
-    @Volatile var head: WaitNode? = null
+    @Volatile
+    var head: WaitNode? = null
 
     val tail = AtomicReference<WaitNode?>(null)
 
@@ -287,11 +293,53 @@ internal open class Synchronizer {
     /**
      * Tells whether the first thread of the queue seems to wait to acquire alone. A lock that
      * is shared uses it to let such a thread pass before the threads that would share.
+     *
+     * [head] is the head of the queue, which the caller read. A volatile read is what costs
+     * here, so the caller does not make it twice.
      */
-    fun apparentlyFirstQueuedIsExclusive(): Boolean {
-        val next = head?.next ?: return false
+    inline fun apparentlyFirstQueuedIsExclusive(head: WaitNode): Boolean {
+        val next = head.next ?: return false
 
         return next !is SharedNode && next.waiter != null
+    }
+
+    /**
+     * Tells whether another thread than the calling one has waited longer to acquire. What is
+     * fair asks before it takes what is free.
+     */
+    fun hasQueuedPredecessors(): Boolean {
+        val first = firstQueuedThread()
+
+        return first != null && first !== callingThread()
+    }
+
+    // Returns the thread that has waited for the longest, or null when no thread waits
+    private fun firstQueuedThread(): Thread? {
+        val next = head?.next
+
+        if (next != null) {
+            val waiter = next.waiter
+
+            // The link is read last, as in the original. A node that leaves the queue clears
+            // it first, so its thread still waited when it was read.
+            if (waiter != null && next.prev != null) {
+                return waiter
+            }
+        }
+
+        // Else a node is being linked, or the first thread gave up, or the queue has no head
+        // yet. Goes from the tail back to the head, and keeps the last thread that it meets.
+        var first: Thread? = null
+        var node = tail.load()
+
+        while (node != null) {
+            val prev = node.prev ?: break
+
+            node.waiter?.let { first = it }
+            node = prev
+        }
+
+        return first
     }
 
     /**
@@ -314,9 +362,6 @@ internal open class Synchronizer {
     /**
      * Appends to the queue the [node] of a thread that waited for a condition. Its thread sees
      * a predecessor before the node is enqueued, which [canReacquire] accounts for.
-     *
-     * That thread sleeps, and did not look at the node that it is put behind. When that one is
-     * cancelled, the thread is woken up to skip it.
      */
     fun enqueue(node: ConditionNode) {
         while (true) {
@@ -327,14 +372,51 @@ internal open class Synchronizer {
             if (last == null) {
                 createQueue()
             } else if (tail.compareAndSet(last, node)) {
-                last.next = node
-
-                if (last.cancelled) {
-                    node.waiter?.let(::unpark)
-                }
-
+                link(last, node)
                 return
             }
+        }
+    }
+
+    /**
+     * Links [node], which a signal appended behind [last].
+     *
+     * The thread of the node sleeps, and did not look at the node that it is put behind. When
+     * that one gave up, the thread is woken up to skip it.
+     *
+     * The thread of the node may also have given up before this link is written, and the
+     * thread behind may have skipped the node already. The link then puts the node back in
+     * front of that thread, where no release would find it. So the mark of the node is read
+     * once the link is written, and the thread behind is linked in its place.
+     *
+     * That thread writes the same link when it skips, and so does the one behind it if it
+     * gives up too. Whichever of these writes comes last is right. A thread that has not
+     * skipped up to [last] yet will write after this. And a thread that this links is looked
+     * at again afterwards: if it gave up meanwhile, the thread that skips it may have written
+     * first.
+     */
+    fun link(last: WaitNode, node: ConditionNode) {
+        last.next = node
+
+        if (last.cancelled) {
+            node.waiter?.let(::unpark)
+        }
+
+        var linked: WaitNode = node
+
+        while (linked.cancelled) {
+            var next = linked.next
+
+            while (next != null && next.cancelled) {
+                next = next.next
+            }
+
+            if (next == null || next.prev !== last) {
+                return
+            }
+
+            last.next = next
+            linked = next
         }
     }
 
@@ -366,7 +448,7 @@ internal open class Synchronizer {
      * Gives the queue its dummy node. The head is set after the tail. A thread that enqueues
      * itself in between finds that its predecessor is not the head yet, and tries again.
      */
-    private fun createQueue() {
+    fun createQueue() {
         val dummy = ExclusiveNode()
 
         if (tail.compareAndSet(null, dummy)) {
@@ -456,17 +538,21 @@ internal open class Synchronizer {
 internal sealed class WaitNode {
 
     // Attached by the update of the tail. Null again once the node is the head.
-    @Volatile var prev: WaitNode? = null
+    @Volatile
+    var prev: WaitNode? = null
 
     // Not null when the next node can be woken up
-    @Volatile var next: WaitNode? = null
+    @Volatile
+    var next: WaitNode? = null
 
     // Written by its thread, cleared by the thread that wakes it up
-    @Volatile var status = 0
+    @Volatile
+    var status = 0
 
     // Set by its thread when it gives up. It is a field of its own, since a thread that wakes
     // this one up may write the status at the same time.
-    @Volatile var cancelled = false
+    @Volatile
+    var cancelled = false
 
     // Not null while a thread waits on this. Its accesses are between accesses of the other
     // fields.

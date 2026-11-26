@@ -28,6 +28,7 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNull
+import kotlin.test.assertSame
 import kotlin.test.assertTrue
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -43,7 +44,8 @@ private val AcquireTimeout = 10.seconds
 
 /**
  * Tests what the locks do not exercise of [Synchronizer] one case at a time: a try that throws
- * while its thread is in the queue, and a thread that gives up in front of another one.
+ * while its thread is in the queue, a thread that gives up in front of another one, and a link
+ * to a node that gave up.
  */
 class SynchronizerTest {
 
@@ -144,5 +146,113 @@ class SynchronizerTest {
         assertIs<IllegalStateException>(first())
         assertNull(second())
         assertTrue(acquired.load())
+    }
+
+    /**
+     * A signal links a condition node behind its predecessor in the place of the thread of
+     * that node, which sleeps. That write may come late: after the thread gave up, and after
+     * the thread behind it skipped the node. The head would then point again to a node that no
+     * thread waits on, with the first thread behind it. The signal must put that thread back
+     * in its place, since a release only looks at the node after the head.
+     */
+    @Test
+    fun aSignalThatLinksANodeThatGaveUpLinksTheThreadBehindInstead() {
+        val synchronizer = Synchronizer()
+
+        synchronizer.state.store(HELD)
+
+        // It wakes up by itself after a while, so that a lost wake-up fails this test
+        val waiter = startThread {
+            assertTrue(synchronizer.acquireWithin(AcquireTimeout, shared = false))
+        }
+
+        val start = TimeSource.Monotonic.markNow()
+
+        while (synchronizer.tail.load()?.status != WAITING) {
+            check(start.elapsedNow() < AcquireTimeout) { "The thread never waited" }
+        }
+
+        val head = checkNotNull(synchronizer.head)
+        val first = checkNotNull(synchronizer.tail.load())
+        val gaveUp = ConditionNode()
+
+        // The node gave up, and the thread behind it skipped it
+        gaveUp.prev = head
+        gaveUp.next = first
+        gaveUp.cancelled = true
+
+        // The signal writes its link last
+        synchronizer.link(head, gaveUp)
+
+        assertSame(first, head.next)
+
+        val release = TimeSource.Monotonic.markNow()
+
+        synchronizer.state.store(FREE)
+        synchronizer.signalNext()
+
+        assertNull(waiter())
+
+        // The release woke the thread up, not the end of its own time
+        assertTrue(release.elapsedNow() < AcquireTimeout / 2)
+    }
+
+    @Test
+    fun aSignalLeavesItsLinkToAThreadThatHasNotSkippedYet() {
+        val synchronizer = Synchronizer()
+        val head = ExclusiveNode()
+        val gaveUp = ConditionNode()
+        val behind = ExclusiveNode()
+
+        // The thread behind still has the node that gave up as its predecessor
+        gaveUp.prev = head
+        gaveUp.next = behind
+        gaveUp.cancelled = true
+        behind.prev = gaveUp
+
+        synchronizer.link(head, gaveUp)
+
+        assertSame(gaveUp, head.next)
+
+        // Its own link comes after the one of the signal, and is the one that stays
+        synchronizer.skip(behind, gaveUp)
+
+        assertSame(behind, head.next)
+        assertSame(head, behind.prev)
+    }
+
+    @Test
+    fun aSignalLinksTheFirstThreadBehindThatDidNotGiveUp() {
+        val synchronizer = Synchronizer()
+        val head = ExclusiveNode()
+        val gaveUp = ConditionNode()
+        val gaveUpToo = ExclusiveNode()
+        val behind = ExclusiveNode()
+
+        // Two nodes gave up in a row, and the thread behind them skipped both
+        gaveUp.prev = head
+        gaveUp.next = gaveUpToo
+        gaveUp.cancelled = true
+        gaveUpToo.prev = head
+        gaveUpToo.next = behind
+        gaveUpToo.cancelled = true
+        behind.prev = head
+
+        synchronizer.link(head, gaveUp)
+
+        assertSame(behind, head.next)
+    }
+
+    @Test
+    fun aSignalLinksItsNodeWhenItsThreadStillWaits() {
+        val synchronizer = Synchronizer()
+        val head = ExclusiveNode()
+        val node = ConditionNode()
+
+        node.prev = head
+
+        synchronizer.link(head, node)
+
+        assertSame(node, head.next)
     }
 }

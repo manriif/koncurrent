@@ -25,10 +25,17 @@ package koncurrent.benchmarks
 
 import co.touchlab.stately.collections.ConcurrentMutableMap
 import co.touchlab.stately.concurrency.Lock
+import koncurrent.ArrayBlockingQueue
 import koncurrent.ConcurrentHashMap
+import koncurrent.ConcurrentLinkedDeque
+import koncurrent.ConcurrentLinkedQueue
+import koncurrent.ConcurrentSkipListMap
+import koncurrent.LinkedBlockingDeque
+import koncurrent.LinkedBlockingQueue
 import koncurrent.computeIfAbsent
 import koncurrent.locks.ReentrantLock
 import koncurrent.locks.ReentrantReadWriteLock
+import koncurrent.locks.StampedLock
 import kotlin.concurrent.atomics.AtomicLong
 
 private val ThreadCounts = listOf(1, 2, 4, 8)
@@ -43,13 +50,18 @@ private val Sink = AtomicLong(0L)
 
 private const val MAPS = "maps"
 private const val LOCKS = "locks"
+private const val QUEUES = "queues"
+private const val SORTED = "sorted"
+
+// Far more than the threads ever hold, so that the queue with a capacity is never full
+private const val QUEUE_CAPACITY = 1024
 
 /**
  * Measures the maps and the locks on real threads. kotlinx-benchmark only runs one thread on
  * Kotlin/Native. Each line is a benchmark, an implementation, a number of keys, a number of
  * threads, then the median, the lowest and the highest operations per second of the rounds.
  *
- * [args] may hold `maps` or `locks` to only measure those.
+ * [args] may hold `maps`, `locks`, `queues` or `sorted` to only measure those.
  */
 public fun main(args: Array<String>) {
     println("benchmark,implementation,keys,threads,median,lowest,highest")
@@ -61,6 +73,14 @@ public fun main(args: Array<String>) {
     if (args.isEmpty() || LOCKS in args) {
         measureLocks()
     }
+
+    if (args.isEmpty() || QUEUES in args) {
+        measureQueues()
+    }
+
+    if (args.isEmpty() || SORTED in args) {
+        measureSortedMaps()
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -71,31 +91,35 @@ private fun measureMaps() {
     for (keyCount in listOf(SMALL_KEY_COUNT, LARGE_KEY_COUNT)) {
         val keys = Keys(keyCount)
 
-        measureMap(
+        val koncurrent = measureMap(
             implementation = "Koncurrent",
             keys = keys,
             create = { ConcurrentHashMap<Key, Key>() },
             get = { map, key -> map[key] },
             put = { map, key -> map.put(key, key) },
             remove = { map, key -> map.remove(key) },
-            computeIfAbsent = { map, key -> map.computeIfAbsent(key) { it } },
         )
 
-        measureMap(
+        measureComputeIfAbsent("Koncurrent", keys) { key -> koncurrent.computeIfAbsent(key) { it } }
+
+        val stately = measureMap(
             implementation = "Stately",
             keys = keys,
             create = { ConcurrentMutableMap<Key, Key>() },
             get = { map, key -> map[key] },
             put = { map, key -> map.put(key, key) },
             remove = { map, key -> map.remove(key) },
-            computeIfAbsent = { map, key -> map.computeIfAbsent(key) { it } },
         )
+
+        measureComputeIfAbsent("Stately", keys) { key -> stately.computeIfAbsent(key) { it } }
     }
 }
 
 /**
  * Measures the workloads on the maps that [create] returns. The map is used through [get],
- * [put], [remove] and [computeIfAbsent], so each of its calls is a direct one.
+ * [put] and [remove], so each of its calls is a direct one.
+ *
+ * Returns a map that holds every key, for what else its caller measures.
  */
 private inline fun <M : Any> measureMap(
     implementation: String,
@@ -104,8 +128,7 @@ private inline fun <M : Any> measureMap(
     crossinline get: (map: M, key: Key) -> Key?,
     crossinline put: (map: M, key: Key) -> Key?,
     crossinline remove: (map: M, key: Key) -> Key?,
-    crossinline computeIfAbsent: (map: M, key: Key) -> Key,
-) {
+): M {
     val fill = {
         val map = create()
 
@@ -201,7 +224,18 @@ private inline fun <M : Any> measureMap(
         }
     }
 
-    // Every key has a value, which is what a cache gets once it is filled
+    return full
+}
+
+/**
+ * Measures [computeIfAbsent] on a map where every key has a value, which is what a cache gets
+ * once it is filled.
+ */
+private inline fun measureComputeIfAbsent(
+    implementation: String,
+    keys: Keys,
+    crossinline computeIfAbsent: (key: Key) -> Key,
+) {
     for (threads in ThreadCounts) {
         report("computeIfAbsent", implementation, keys.count, threads) {
             concurrentRound(threads) { thread, running ->
@@ -218,7 +252,7 @@ private inline fun <M : Any> measureMap(
                             get = { index ->
                                 val key = keys.probes[index]
 
-                                if (computeIfAbsent(full, key) !== key) {
+                                if (computeIfAbsent(key) !== key) {
                                     found++
                                 }
                             },
@@ -260,6 +294,7 @@ private fun measureLocks() {
     val nodeSpinLock = NodeSpinLock()
     val statelyLock = Lock()
     val mutex = PthreadMutex()
+    val stampedLock = StampedLock()
 
     for (threads in ThreadCounts) {
         measureLock(
@@ -311,6 +346,30 @@ private fun measureLocks() {
             lock = { mutex.lock() },
             unlock = { mutex.unlock() },
         )
+
+        measureStampedLock(
+            benchmark = "stampedWriteLock",
+            threads = threads,
+            lock = { stampedLock.writeLock() },
+            unlock = { stampedLock.unlockWrite(it) },
+        )
+
+        measureStampedLock(
+            benchmark = "stampedReadLock",
+            threads = threads,
+            lock = { stampedLock.readLock() },
+            unlock = { stampedLock.unlockRead(it) },
+            shared = true,
+        )
+
+        // No thread writes, so every stamp is valid
+        measureStampedLock(
+            benchmark = "stampedOptimisticRead",
+            threads = threads,
+            lock = { stampedLock.tryOptimisticRead() },
+            unlock = { check(stampedLock.validate(it)) },
+            shared = true,
+        )
     }
 }
 
@@ -358,4 +417,162 @@ private inline fun measureLock(
 
     // A lock that let two threads in at once would have lost some of the additions
     check(shared || counter.value == counted.load()) { "$benchmark is not a lock" }
+}
+
+/**
+ * Measures as [measureLock] does a lock whose [lock] returns a stamp, which its [unlock] takes.
+ */
+private inline fun measureStampedLock(
+    benchmark: String,
+    threads: Int,
+    crossinline lock: () -> Long,
+    crossinline unlock: (stamp: Long) -> Unit,
+    shared: Boolean = false,
+) {
+    val counter = Counter()
+    val counted = AtomicLong(0L)
+
+    report(benchmark, "lock", keyCount = 0, threads) {
+        concurrentRound(threads) { _, running ->
+            var operations = 0L
+            var seen = 0L
+
+            while (running.load()) {
+                repeat(CHUNK) {
+                    val stamp = lock()
+
+                    if (shared) {
+                        seen += counter.value
+                    } else {
+                        counter.value++
+                    }
+
+                    unlock(stamp)
+                }
+
+                operations += CHUNK
+            }
+
+            val _ = Sink.addAndFetch(seen)
+            val _ = counted.addAndFetch(operations)
+            operations
+        }
+    }
+
+    check(shared || counter.value == counted.load()) { "$benchmark is not a lock" }
+}
+
+///////////////////////////////////////////////////////////////////////////
+// Queues
+///////////////////////////////////////////////////////////////////////////
+
+private fun measureQueues() {
+    val element = Any()
+    val concurrentLinkedQueue = ConcurrentLinkedQueue<Any>()
+    val concurrentLinkedDeque = ConcurrentLinkedDeque<Any>()
+    val linkedBlockingQueue = LinkedBlockingQueue<Any>()
+    val linkedBlockingDeque = LinkedBlockingDeque<Any>()
+    val arrayBlockingQueue = ArrayBlockingQueue<Any>(QUEUE_CAPACITY)
+
+    for (threads in ThreadCounts) {
+        measureQueue(
+            benchmark = "concurrentLinkedQueue",
+            threads = threads,
+            offer = { concurrentLinkedQueue.offer(element) },
+            poll = { concurrentLinkedQueue.poll() },
+        )
+
+        measureQueue(
+            benchmark = "concurrentLinkedDeque",
+            threads = threads,
+            offer = { concurrentLinkedDeque.offerFirst(element) },
+            poll = { concurrentLinkedDeque.pollLast() },
+        )
+
+        measureQueue(
+            benchmark = "linkedBlockingQueue",
+            threads = threads,
+            offer = { linkedBlockingQueue.offer(element) },
+            poll = { linkedBlockingQueue.poll() },
+        )
+
+        measureQueue(
+            benchmark = "linkedBlockingDeque",
+            threads = threads,
+            offer = { linkedBlockingDeque.offerFirst(element) },
+            poll = { linkedBlockingDeque.pollLast() },
+        )
+
+        measureQueue(
+            benchmark = "arrayBlockingQueue",
+            threads = threads,
+            offer = { arrayBlockingQueue.offer(element) },
+            poll = { arrayBlockingQueue.poll() },
+        )
+    }
+}
+
+/**
+ * Measures the pairs of [offer] and [poll] that the threads do on the same queue. A thread
+ * adds an element, then takes one, which may be the element of another thread.
+ */
+private inline fun measureQueue(
+    benchmark: String,
+    threads: Int,
+    crossinline offer: () -> Boolean,
+    crossinline poll: () -> Any?,
+) {
+    report(benchmark, "queue", keyCount = 0, threads) {
+        concurrentRound(threads) { _, running ->
+            var operations = 0L
+            var taken = 0L
+
+            while (running.load()) {
+                repeat(CHUNK) {
+                    if (offer() && poll() != null) {
+                        taken++
+                    }
+                }
+
+                operations += CHUNK
+            }
+
+            val _ = Sink.addAndFetch(taken)
+            operations
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////
+// Sorted maps
+///////////////////////////////////////////////////////////////////////////
+
+/**
+ * Measures the sorted map on the workloads of the maps, next to the hash map on the same keys.
+ */
+private fun measureSortedMaps() {
+    // The hash codes are random, so the keys come in no order
+    val order = Comparator<Key> { first, second -> first.hashCode().compareTo(second.hashCode()) }
+
+    for (keyCount in listOf(SMALL_KEY_COUNT, LARGE_KEY_COUNT)) {
+        val keys = Keys(keyCount)
+
+        val _ = measureMap(
+            implementation = "ConcurrentSkipListMap",
+            keys = keys,
+            create = { ConcurrentSkipListMap<Key, Key>(order) },
+            get = { map, key -> map[key] },
+            put = { map, key -> map.put(key, key) },
+            remove = { map, key -> map.remove(key) },
+        )
+
+        val _ = measureMap(
+            implementation = "ConcurrentHashMap",
+            keys = keys,
+            create = { ConcurrentHashMap<Key, Key>() },
+            get = { map, key -> map[key] },
+            put = { map, key -> map.put(key, key) },
+            remove = { map, key -> map.remove(key) },
+        )
+    }
 }

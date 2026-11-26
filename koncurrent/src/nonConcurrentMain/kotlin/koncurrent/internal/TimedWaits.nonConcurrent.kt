@@ -22,11 +22,19 @@
 package koncurrent.internal
 
 import koncurrent.CountDownLatch
+import koncurrent.CyclicBarrier
 import koncurrent.Semaphore
+import koncurrent.locks.StampedLock
 
-// The time would run out, since no other thread could release or count down. So both answer
-// at once.
+// The time would run out, since no other thread could release, count down or arrive. So they
+// answer at once.
 
 internal actual fun Semaphore.tryAcquireWithin(nanos: Long): Boolean = tryAcquire()
 
 internal actual fun CountDownLatch.awaitWithin(nanos: Long): Boolean = getCount() == 0L
+
+internal actual fun CyclicBarrier.awaitWithin(nanos: Long): Int = awaitBriefly()
+
+internal actual fun StampedLock.tryWriteLockWithin(nanos: Long): Long = tryWriteLock()
+
+internal actual fun StampedLock.tryReadLockWithin(nanos: Long): Long = tryReadLock()

@@ -38,8 +38,9 @@ import kotlin.time.Duration
  * a semaphore also serves as a signal between threads: one waits in [acquire] until another
  * calls [release].
  *
- * The semaphore is not fair. A thread that asks for a permit takes one if there is any, even
- * when other threads wait.
+ * The semaphore is not fair unless it is created so. A thread that asks for a permit then
+ * takes one if there is any, even when other threads wait. The permits of a fair semaphore go
+ * to the threads in the order of their arrival.
  *
  * ### Platforms
  *
@@ -54,6 +55,11 @@ import kotlin.time.Duration
 public expect class Semaphore(permits: Int) {
 
     /**
+     * Creates a semaphore of [permits] permits that is [fair] or not.
+     */
+    public constructor(permits: Int, fair: Boolean)
+
+    /**
      * Takes a permit, and waits while there is none.
      *
      * @throws InterruptedException if the thread is interrupted before or while it waits
@@ -61,7 +67,8 @@ public expect class Semaphore(permits: Int) {
     public fun acquire()
 
     /**
-     * Takes a permit if there is one. Never waits.
+     * Takes a permit if there is one. Never waits. It takes it even when other threads wait
+     * for one, and even when the semaphore is fair.
      *
      * @return whether a permit was taken
      */
@@ -78,6 +85,11 @@ public expect class Semaphore(permits: Int) {
      * threads use the semaphore.
      */
     public fun availablePermits(): Int
+
+    /**
+     * Tells whether this semaphore is fair.
+     */
+    public fun isFair(): Boolean
 }
 
 /**

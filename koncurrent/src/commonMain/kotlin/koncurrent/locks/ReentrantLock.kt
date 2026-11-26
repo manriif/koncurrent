@@ -30,8 +30,10 @@ import koncurrent.InterruptedException
  * It must then call [unlock] once for each [lock]. Prefer [withLock], which never forgets to
  * unlock.
  *
- * The lock is not fair. A thread that asks for a free lock takes it, even when other threads
- * wait for it. This is faster than handing the lock over in arrival order.
+ * The lock is not fair unless it is created so. A thread that asks for a free lock then takes
+ * it, even when other threads wait for it. A fair lock goes to the thread that has waited for
+ * the longest. No thread waits forever for it, and it is much slower when many threads take
+ * it, since every release wakes a thread up.
  *
  * The lock holds no native resource. It has nothing to close, and it is freed as any object.
  *
@@ -43,6 +45,11 @@ import koncurrent.InterruptedException
  * - JS and Wasm have one thread, which never waits. The lock only counts its holds there.
  */
 public expect class ReentrantLock() : Lock {
+
+    /**
+     * Creates a lock that is [fair] or not.
+     */
+    public constructor(fair: Boolean)
 
     /**
      * Acquires the lock, and waits while another thread holds it. An interrupt does not end
@@ -62,8 +69,8 @@ public expect class ReentrantLock() : Lock {
     /**
      * Acquires the lock if no other thread holds it. Never waits.
      *
-     * It takes a free lock even when other threads wait for it. It succeeds if the current
-     * thread already holds the lock, with one more hold.
+     * It takes a free lock even when other threads wait for it, and even when the lock is
+     * fair. It succeeds if the current thread already holds the lock, with one more hold.
      *
      * @return whether the lock was acquired
      */
@@ -82,4 +89,9 @@ public expect class ReentrantLock() : Lock {
      * until another thread, which holds the lock in turn, signals it.
      */
     public fun newCondition(): Condition
+
+    /**
+     * Tells whether this lock is fair.
+     */
+    public fun isFair(): Boolean
 }

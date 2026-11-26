@@ -24,6 +24,10 @@
  * assistance from members of JCP JSR-166 Expert Group and released to the public domain, as
  * explained at http://creativecommons.org/publicdomain/zero/1.0/
  */
+// Kotlin/Native gives each function its own frame of GC roots, even where LLVM inlines it. The
+// small functions of the hot paths are inlined by Kotlin, which merges their frames.
+@file:Suppress("NOTHING_TO_INLINE")
+
 package koncurrent.internal
 
 import koncurrent.InterruptedException
@@ -40,8 +44,8 @@ private const val EXCLUSIVE_MASK = (1 shl SHARED_SHIFT) - 1
 private const val TOO_MANY_HOLDS = "Maximum lock count exceeded"
 
 /**
- * The non-fair `ReentrantReadWriteLock` of JSR-166 in common Kotlin. It backs the public lock
- * where the platform has none.
+ * The `ReentrantReadWriteLock` of JSR-166 in common Kotlin. It backs the public lock where the
+ * platform has none.
  *
  * Several threads can hold the read lock at once, while no thread holds the write lock. One
  * thread at a time holds the write lock. That thread can also take the read lock, and keep it
@@ -52,6 +56,18 @@ private const val TOO_MANY_HOLDS = "Maximum lock count exceeded"
  * rule keeps writers from waiting forever while readers follow each other. A thread that does
  * not read yet lets the first thread of the queue pass when it waits to write.
  *
+ * A [fair] lock goes to the threads in the order of their arrival. A thread then only takes a
+ * free lock when no other thread waits for it, and joins the queue without trying a few times
+ * first. A thread that already reads still reads again, since the threads of the queue wait for
+ * it.
+ *
+ * A fair lock is told by its class, [FairPortableReentrantReadWriteLock], and not by a field. A
+ * field would sit next to those that the readers write. A reader that looks at it before it
+ * updates the state then waits for the memory that another reader just wrote, which was
+ * measured to cost two readers a fifth of their speed. The class is read from the header of the
+ * object, which no thread writes. And a reader looks at the class only once the lock has a
+ * queue, so it reads nothing more than it did without the fair mode until threads contend.
+ *
  * The read lock is reentrant, so each thread has a count of its holds. The first reader has its
  * count in the lock. The others have theirs in a thread local.
  *
@@ -60,7 +76,10 @@ private const val TOO_MANY_HOLDS = "Maximum lock count exceeded"
  * turn, which costs them more than their thread local does. And a read hold is released with
  * one atomic addition, where the original retries an atomic update.
  */
-internal class PortableReentrantReadWriteLock : Synchronizer() {
+internal open class PortableReentrantReadWriteLock : Synchronizer() {
+
+    val fair: Boolean
+        get() = this is FairPortableReentrantReadWriteLock
 
     // The thread that holds the write lock. Not volatile. A thread only needs to tell whether
     // it is the owner, and it always reads its own write.
@@ -88,7 +107,11 @@ internal class PortableReentrantReadWriteLock : Synchronizer() {
 
     // Apart from lockWrite on purpose. Synchronizer.acquire tells why.
     private fun lockWriteContended(current: Int) {
-        acquire(shared = false, interruptible = false) { tryAcquireWrite(current) }
+        if (fair) {
+            val _ = lockWriteQueued(current, interruptible = false, timed = false, 0L)
+        } else {
+            acquire(shared = false, interruptible = false) { tryAcquireWrite(current) }
+        }
     }
 
     /**
@@ -122,17 +145,23 @@ internal class PortableReentrantReadWriteLock : Synchronizer() {
 
         val deadline = if (timed) deadlineAfter(nanos) else 0L
 
-        return lockWriteContended(current, timed, deadline)
+        return lockWriteQueued(current, interruptible = true, timed, deadline)
     }
 
-    // Apart from acquireWriteOrGiveUp on purpose. Synchronizer.acquire tells why.
-    private fun lockWriteContended(current: Int, timed: Boolean, deadline: Long): Boolean {
-        return acquireQueued(null, shared = false, interruptible = true, timed, deadline) {
+    // Apart from its callers on purpose. Synchronizer.acquire tells why.
+    private fun lockWriteQueued(
+        current: Int,
+        interruptible: Boolean,
+        timed: Boolean,
+        deadline: Long,
+    ): Boolean {
+        return acquireQueued(null, shared = false, interruptible, timed, deadline) {
             tryAcquireWrite(current)
         }
     }
 
-    fun tryLockWrite(): Boolean = tryAcquireWrite(currentThreadId())
+    // Takes a free lock even when other threads wait for it, and even when the lock is fair
+    fun tryLockWrite(): Boolean = tryAcquireWrite(currentThreadId(), inTurn = false)
 
     fun unlockWrite() {
         if (owner != currentThreadId()) {
@@ -152,7 +181,11 @@ internal class PortableReentrantReadWriteLock : Synchronizer() {
 
     fun writeHoldCount(): Int = if (owner == currentThreadId()) exclusiveCount(state.load()) else 0
 
-    private fun tryAcquireWrite(current: Int): Boolean {
+    private fun tryAcquireWrite(current: Int): Boolean = tryAcquireWrite(current, inTurn = true)
+
+    // [inTurn] tells to leave a free lock to the queue when a fair lock has to. Inline, so that
+    // a try that takes no turn does not look at the queue.
+    private inline fun tryAcquireWrite(current: Int, inTurn: Boolean): Boolean {
         val c = state.load()
 
         if (c != 0) {
@@ -172,7 +205,7 @@ internal class PortableReentrantReadWriteLock : Synchronizer() {
             return true
         }
 
-        if (!state.compareAndSet(c, c + 1)) {
+        if ((inTurn && fair && hasQueuedPredecessors()) || !state.compareAndSet(c, c + 1)) {
             return false
         }
 
@@ -194,7 +227,11 @@ internal class PortableReentrantReadWriteLock : Synchronizer() {
 
     // Apart from lockRead on purpose. Synchronizer.acquire tells why.
     private fun lockReadContended(current: Int) {
-        acquire(shared = true, interruptible = false) { tryAcquireRead(current) }
+        if (fair) {
+            val _ = lockReadQueued(current, interruptible = false, timed = false, 0L)
+        } else {
+            acquire(shared = true, interruptible = false) { tryAcquireRead(current) }
+        }
     }
 
     /**
@@ -228,12 +265,17 @@ internal class PortableReentrantReadWriteLock : Synchronizer() {
 
         val deadline = if (timed) deadlineAfter(nanos) else 0L
 
-        return lockReadContended(current, timed, deadline)
+        return lockReadQueued(current, interruptible = true, timed, deadline)
     }
 
-    // Apart from acquireReadOrGiveUp on purpose. Synchronizer.acquire tells why.
-    private fun lockReadContended(current: Int, timed: Boolean, deadline: Long): Boolean {
-        return acquireQueued(null, shared = true, interruptible = true, timed, deadline) {
+    // Apart from its callers on purpose. Synchronizer.acquire tells why.
+    private fun lockReadQueued(
+        current: Int,
+        interruptible: Boolean,
+        timed: Boolean,
+        deadline: Long,
+    ): Boolean {
+        return acquireQueued(null, shared = true, interruptible, timed, deadline) {
             tryAcquireRead(current)
         }
     }
@@ -316,7 +358,7 @@ internal class PortableReentrantReadWriteLock : Synchronizer() {
         val readers = sharedCount(c)
 
         if (
-            !apparentlyFirstQueuedIsExclusive() &&
+            !readerShouldWait() &&
             readers < MAX_COUNT &&
             state.compareAndSet(c, c + SHARED_UNIT)
         ) {
@@ -327,9 +369,18 @@ internal class PortableReentrantReadWriteLock : Synchronizer() {
         return fullTryAcquireRead(current)
     }
 
+    // Tells whether a thread that does not read yet must let the queue pass. For a fair lock
+    // that is any thread that has waited longer, else a writer that waits first. The queue is
+    // looked for first: until there is one, the lock does not look at its class.
+    private inline fun readerShouldWait(): Boolean {
+        val head = head ?: return false
+
+        return if (fair) hasQueuedPredecessors() else apparentlyFirstQueuedIsExclusive(head)
+    }
+
     /**
      * Tries to take the read lock again after a first try failed, on a lost update of the
-     * state or because a writer seems to wait.
+     * state or because a thread of the queue must pass first.
      */
     private fun fullTryAcquireRead(current: Int): Boolean {
         while (true) {
@@ -341,9 +392,9 @@ internal class PortableReentrantReadWriteLock : Synchronizer() {
                 }
 
                 // Else the thread holds the write lock. It must not wait for itself.
-            } else if (apparentlyFirstQueuedIsExclusive() && readHoldCount(current) == 0) {
-                // Lets the waiting writer pass. A thread that already reads goes on, since
-                // that writer waits for it.
+            } else if (readerShouldWait() && readHoldCount(current) == 0) {
+                // Lets the queue pass. A thread that already reads goes on, since the queue
+                // waits for it.
                 return false
             }
 
@@ -377,6 +428,19 @@ internal class PortableReentrantReadWriteLock : Synchronizer() {
         }
     }
 
+}
+
+/**
+ * A [PortableReentrantReadWriteLock] that is fair.
+ *
+ * It has its queue from the start. A reader only asks whether the lock is fair once it has a
+ * queue, so a fair lock without one would let a reader pass the first threads that wait.
+ */
+internal class FairPortableReentrantReadWriteLock : PortableReentrantReadWriteLock() {
+
+    init {
+        createQueue()
+    }
 }
 
 /**

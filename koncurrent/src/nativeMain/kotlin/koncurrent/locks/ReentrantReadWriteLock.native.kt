@@ -21,22 +21,29 @@
  */
 package koncurrent.locks
 
+import koncurrent.internal.FairPortableReentrantReadWriteLock
 import koncurrent.internal.PortableReentrantReadWriteLock
 import kotlin.time.Duration
 
-public actual class ReentrantReadWriteLock {
+public actual class ReentrantReadWriteLock actual constructor(fair: Boolean) : ReadWriteLock {
 
-    private val lock = PortableReentrantReadWriteLock()
+    private val lock =
+        if (fair) FairPortableReentrantReadWriteLock() else PortableReentrantReadWriteLock()
+
     private val readLock = ReadLock(lock)
     private val writeLock = WriteLock(lock)
 
-    public actual fun readLock(): ReadLock = readLock
+    public actual constructor() : this(false)
 
-    public actual fun writeLock(): WriteLock = writeLock
+    actual override fun readLock(): ReadLock = readLock
+
+    actual override fun writeLock(): WriteLock = writeLock
 
     public actual fun getReadHoldCount(): Int = lock.readHoldCount()
 
     public actual fun getWriteHoldCount(): Int = lock.writeHoldCount()
+
+    public actual fun isFair(): Boolean = lock.fair
 
     public actual class ReadLock internal constructor(
         private val lock: PortableReentrantReadWriteLock,

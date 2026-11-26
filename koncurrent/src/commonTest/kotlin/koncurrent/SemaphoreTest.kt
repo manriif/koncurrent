@@ -32,11 +32,23 @@ import kotlin.time.Duration.Companion.milliseconds
 /**
  * Tests what one thread sees of the public [Semaphore].
  */
-class SemaphoreTest {
+open class SemaphoreTest {
+
+    protected open val fair: Boolean
+        get() = false
+
+    private fun newSemaphore(permits: Int): Semaphore =
+        if (fair) Semaphore(permits, true) else Semaphore(permits)
+
+    @Test
+    fun semaphoreTellsWhetherItIsFair() {
+        assertEquals(fair, newSemaphore(1).isFair())
+        assertFalse(Semaphore(1, false).isFair())
+    }
 
     @Test
     fun permitsAreTakenAndGivenBack() {
-        val semaphore = Semaphore(2)
+        val semaphore = newSemaphore(2)
 
         semaphore.acquire()
         assertTrue(semaphore.tryAcquire())
@@ -52,7 +64,7 @@ class SemaphoreTest {
 
     @Test
     fun releaseAddsPermitsBeyondTheFirstCount() {
-        val semaphore = Semaphore(0)
+        val semaphore = newSemaphore(0)
 
         assertFalse(semaphore.tryAcquire())
 
@@ -64,7 +76,7 @@ class SemaphoreTest {
 
     @Test
     fun negativeCountNeedsReleasesFirst() {
-        val semaphore = Semaphore(-1)
+        val semaphore = newSemaphore(-1)
 
         assertFalse(semaphore.tryAcquire())
 
@@ -78,7 +90,7 @@ class SemaphoreTest {
 
     @Test
     fun withPermitReturnsTheValueOfItsAction() {
-        val semaphore = Semaphore(1)
+        val semaphore = newSemaphore(1)
 
         val value = semaphore.withPermit {
             assertEquals(0, semaphore.availablePermits())
@@ -91,7 +103,7 @@ class SemaphoreTest {
 
     @Test
     fun withPermitReleasesWhenItsActionFails() {
-        val semaphore = Semaphore(1)
+        val semaphore = newSemaphore(1)
 
         assertFailsWith<IllegalArgumentException> {
             semaphore.withPermit { throw IllegalArgumentException() }
@@ -102,7 +114,7 @@ class SemaphoreTest {
 
     @Test
     fun timedTryAcquireTakesAPermitOrGivesUp() {
-        val semaphore = Semaphore(2)
+        val semaphore = newSemaphore(2)
 
         assertTrue(semaphore.tryAcquire(Duration.ZERO))
         assertTrue(semaphore.tryAcquire(1.milliseconds))
@@ -114,4 +126,13 @@ class SemaphoreTest {
 
         assertTrue(semaphore.tryAcquire(1.milliseconds))
     }
+}
+
+/**
+ * Tests what one thread sees of the public [Semaphore] when it is fair.
+ */
+class FairSemaphoreTest : SemaphoreTest() {
+
+    override val fair: Boolean
+        get() = true
 }

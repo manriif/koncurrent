@@ -3,9 +3,15 @@
 Bug reports and pull requests are welcome. For anything beyond a small fix, open an issue first
 to discuss the approach.
 
-Concurrent code is easy to get wrong in ways that tests miss. A change of a port must come with
-the reasoning that makes it correct, and with a test that fails without it when one can be
-written.
+Two things make a change of a port harder than it looks.
+
+- **Concurrent code is easy to get wrong in ways that tests miss.** A change must come with the
+  reasoning that makes it correct, and with a test that fails without it when one can be
+  written.
+- **The ports are tuned against benchmarks.** A few instructions more on a hot path, or a field
+  that moves in its object, cost up to 30% in the measurements of
+  [docs/benchmarks.md](docs/benchmarks.md#evolution). A change of a hot path must come with its
+  figures, taken as [Benchmarks](#benchmarks) tells.
 
 Match the surrounding code: its naming, its comment density and its layout.
 
@@ -25,10 +31,10 @@ the native benchmarks of its own target.
 
 | Goal | Command | Time |
 |---|---|---:|
-| Build every target and run all the tests | `./gradlew build` | 6 min |
-| JVM tests, Lincheck included | `./gradlew :koncurrent:jvmTest` | 5 min |
-| Android tests on the host | `./gradlew :koncurrent:testAndroidHostTest` | 20 s |
-| Native tests on macOS | `./gradlew :koncurrent:macosArm64Test` | 40 s |
+| Build every target and run all the tests | `./gradlew build` | 13 min |
+| JVM tests, Lincheck included | `./gradlew :koncurrent:jvmTest` | 12 min |
+| Android tests on the host | `./gradlew :koncurrent:testAndroidHostTest` | 1 min |
+| Native tests on macOS | `./gradlew :koncurrent:macosArm64Test` | 2 min |
 | Native tests on Linux | `./gradlew :koncurrent:linuxX64Test` | |
 | Native tests on Windows | `./gradlew :koncurrent:mingwX64Test` | |
 | JS and Wasm tests | `./gradlew :koncurrent:jsNodeTest :koncurrent:wasmJsNodeTest :koncurrent:wasmWasiNodeTest` | 5 s |
@@ -43,7 +49,7 @@ compiles about twenty native targets at once.
 | Path | Content |
 |---|---|
 | `koncurrent` | The library and its benchmarks |
-| `docs` | The design notes, the benchmark results and the test report. Dokka writes the API reference to `docs/api`. |
+| `docs` | The documents that the README lists. Dokka writes the API reference to `docs/api`. |
 
 The targets, the compiler options, the publication and Dokka are set up by
 [Konventions](https://github.com/manriif/konventions). `settings.gradle.kts` names its version.
@@ -52,16 +58,17 @@ The source sets of the library follow the platforms.
 
 | Source set | Targets | Content |
 |---|---|---|
-| `common` | All | The public declarations, the map port and the list |
+| `common` | All | The public declarations, the map port, the list, the ports of the queues, the sorted table and the lock that they share |
 | `java` | JVM, Android | The type aliases to the Java classes |
-| `concurrent` | JVM, Android, native | What needs threads: `Thread`, the ports of the locks, of the semaphore and of the latch, and their queue |
+| `concurrent` | JVM, Android, native | What needs threads: `Thread`, the ports of the locks, of the stamped lock, of the semaphore, of the latch and of the barrier, and their queue |
 | `nonJava` | Native, JS, Wasm | The public classes that wrap the ports |
 | `native` | Native | The native `Thread`, sleeping and waking up threads, the thread local table |
 | `unix`, `apple`, `linux`, `androidNative`, `mingw` | Native families | The pthread calls, whose types differ by family |
 | `nonConcurrent` | JS, wasmJs, wasmWasi | The locks and synchronizers for one thread |
 
-The ports are internal, in `koncurrent.internal`. They are compiled for the JVM too, where
-nothing uses them, so that Lincheck and the JVM stress tests can check them.
+The ports are internal, in `koncurrent.internal`.
+[docs/design.md](docs/design.md#where-the-ports-live) tells why they are compiled for the JVM
+too.
 
 ## Rules for the ports
 
@@ -123,7 +130,7 @@ project resolves the library from the local repository.
 |---|---|---:|
 | JVM map benchmarks | `./gradlew :koncurrent:jvmBenchmarkBenchmark` | 18 min |
 | JVM lock benchmarks | `./gradlew :koncurrent:jvmBenchmarkLocksBenchmark` | 10 min |
-| Native map and lock benchmarks | `./gradlew :koncurrent:nativeBenchmark` | 11 min |
+| Native map, lock, queue and sorted map benchmarks | `./gradlew :koncurrent:nativeBenchmark` | 22 min |
 
 The benchmarks are compiled apart, in `benchmark` compilations of the `jvm` target and of the
 native target of the machine: `macosArm64`, `macosX64`, `linuxX64` or `mingwX64`. They are
@@ -137,10 +144,10 @@ types differ on Windows.
 
 The native benchmark is built in
 `koncurrent/build/bin/<target>/benchmarkReleaseExecutable`, as `benchmark.kexe`, or
-`benchmark.exe` on Windows. Run it with `maps` or `locks` to measure one group. It prints one
-CSV line for each benchmark. JMH writes its reports to `koncurrent/build/reports/benchmarks`.
-A second run replaces the report of the first one when Gradle reuses its configuration, so copy
-a report before running again.
+`benchmark.exe` on Windows. Run it with `maps`, `locks`, `queues` or `sorted` to measure one
+group. It prints one CSV line for each benchmark. JMH writes its reports to
+`koncurrent/build/reports/benchmarks`. A second run replaces the report of the first one when
+Gradle reuses its configuration, so copy a report before running again.
 
 Run the benchmarks on an idle machine, at least twice. Figures taken in two sessions do not
 compare. To tell what a change costs, build the program of before and the program of after,

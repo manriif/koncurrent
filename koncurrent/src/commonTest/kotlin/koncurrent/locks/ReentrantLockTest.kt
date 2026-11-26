@@ -24,6 +24,7 @@ package koncurrent.locks
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -31,11 +32,22 @@ import kotlin.time.Duration.Companion.milliseconds
 /**
  * Tests what one thread sees of the public [ReentrantLock].
  */
-class ReentrantLockTest {
+open class ReentrantLockTest {
+
+    protected open val fair: Boolean
+        get() = false
+
+    private fun newLock(): ReentrantLock = if (fair) ReentrantLock(true) else ReentrantLock()
+
+    @Test
+    fun lockTellsWhetherItIsFair() {
+        assertEquals(fair, newLock().isFair())
+        assertFalse(ReentrantLock(false).isFair())
+    }
 
     @Test
     fun freeLockIsAcquiredAndReleased() {
-        val lock = ReentrantLock()
+        val lock = newLock()
 
         lock.lock()
         lock.unlock()
@@ -46,7 +58,7 @@ class ReentrantLockTest {
 
     @Test
     fun lockIsReentrant() {
-        val lock = ReentrantLock()
+        val lock = newLock()
 
         lock.lock()
         lock.lock()
@@ -60,7 +72,7 @@ class ReentrantLockTest {
 
     @Test
     fun unlockFailsWithoutAHold() {
-        val lock = ReentrantLock()
+        val lock = newLock()
 
         assertFailsWith<IllegalMonitorStateException> { lock.unlock() }
 
@@ -72,7 +84,7 @@ class ReentrantLockTest {
 
     @Test
     fun withLockReturnsTheValueOfItsAction() {
-        val lock = ReentrantLock()
+        val lock = newLock()
         val initialized: Int
 
         val value = lock.withLock {
@@ -86,7 +98,7 @@ class ReentrantLockTest {
 
     @Test
     fun withLockReleasesWhenItsActionFails() {
-        val lock = ReentrantLock()
+        val lock = newLock()
 
         assertFailsWith<IllegalArgumentException> {
             lock.withLock { throw IllegalArgumentException() }
@@ -98,7 +110,7 @@ class ReentrantLockTest {
 
     @Test
     fun freeLockIsAcquiredInEveryWay() {
-        val lock = ReentrantLock()
+        val lock = newLock()
 
         lock.lockInterruptibly()
         assertTrue(lock.tryLock(Duration.ZERO))
@@ -108,4 +120,13 @@ class ReentrantLockTest {
 
         assertFailsWith<IllegalMonitorStateException> { lock.unlock() }
     }
+}
+
+/**
+ * Tests what one thread sees of the public [ReentrantLock] when it is fair.
+ */
+class FairReentrantLockTest : ReentrantLockTest() {
+
+    override val fair: Boolean
+        get() = true
 }

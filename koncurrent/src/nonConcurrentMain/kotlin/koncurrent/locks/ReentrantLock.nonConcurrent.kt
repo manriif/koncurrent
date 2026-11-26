@@ -26,9 +26,11 @@ import koncurrent.internal.SingleThreadCondition
 
 // JS and Wasm have one thread, which never waits. The holds are counted so that an unlock
 // without a lock fails as it does on the other platforms.
-public actual class ReentrantLock : Lock {
+public actual class ReentrantLock actual constructor(private val fair: Boolean) : Lock {
 
     private var holds = 0
+
+    public actual constructor() : this(false)
 
     actual override fun lock() {
         holds++
@@ -47,6 +49,8 @@ public actual class ReentrantLock : Lock {
     }
 
     public actual fun newCondition(): Condition = SingleThreadCondition(::checkHeld)
+
+    public actual fun isFair(): Boolean = fair
 
     private fun checkHeld() {
         if (holds == 0) {

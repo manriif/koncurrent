@@ -23,9 +23,11 @@ package koncurrent
 
 import koncurrent.internal.PortableSemaphore
 
-public actual class Semaphore actual constructor(permits: Int) {
+public actual class Semaphore actual constructor(permits: Int, fair: Boolean) {
 
-    private val semaphore = PortableSemaphore(permits)
+    private val semaphore = PortableSemaphore(permits, fair)
+
+    public actual constructor(permits: Int) : this(permits, false)
 
     public actual fun acquire(): Unit = semaphore.acquire()
 
@@ -36,4 +38,6 @@ public actual class Semaphore actual constructor(permits: Int) {
     public actual fun release(): Unit = semaphore.release()
 
     public actual fun availablePermits(): Int = semaphore.availablePermits()
+
+    public actual fun isFair(): Boolean = semaphore.fair
 }

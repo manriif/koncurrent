@@ -30,26 +30,35 @@ import koncurrent.locks.TestReadWriteLock
  */
 class PortableReentrantReadWriteLockStressTest : ReadWriteLockContractTest() {
 
-    override fun newLock(): TestReadWriteLock {
-        val lock = PortableReentrantReadWriteLock()
-
-        return TestReadWriteLock(
-            read = TestLock(
-                lock = lock::lockRead,
-                lockInterruptibly = lock::lockReadInterruptibly,
-                tryLock = lock::tryLockRead,
-                tryLockFor = { lock.tryLockRead(it.inWholeNanoseconds) },
-                unlock = lock::unlockRead,
-            ),
-            write = TestLock(
-                lock = lock::lockWrite,
-                lockInterruptibly = lock::lockWriteInterruptibly,
-                tryLock = lock::tryLockWrite,
-                tryLockFor = { lock.tryLockWrite(it.inWholeNanoseconds) },
-                unlock = lock::unlockWrite,
-            ),
-            readHoldCount = lock::readHoldCount,
-            writeHoldCount = lock::writeHoldCount,
-        )
-    }
+    override fun newLock(): TestReadWriteLock =
+        PortableReentrantReadWriteLock().asTestReadWriteLock()
 }
+
+/**
+ * Tests the fair [PortableReentrantReadWriteLock] on real threads.
+ */
+class PortableFairReentrantReadWriteLockStressTest : ReadWriteLockContractTest() {
+
+    override fun newLock(): TestReadWriteLock =
+        FairPortableReentrantReadWriteLock().asTestReadWriteLock()
+}
+
+internal fun PortableReentrantReadWriteLock.asTestReadWriteLock(): TestReadWriteLock =
+    TestReadWriteLock(
+        read = TestLock(
+            lock = ::lockRead,
+            lockInterruptibly = ::lockReadInterruptibly,
+            tryLock = ::tryLockRead,
+            tryLockFor = { tryLockRead(it.inWholeNanoseconds) },
+            unlock = ::unlockRead,
+        ),
+        write = TestLock(
+            lock = ::lockWrite,
+            lockInterruptibly = ::lockWriteInterruptibly,
+            tryLock = ::tryLockWrite,
+            tryLockFor = { tryLockWrite(it.inWholeNanoseconds) },
+            unlock = ::unlockWrite,
+        ),
+        readHoldCount = ::readHoldCount,
+        writeHoldCount = ::writeHoldCount,
+    )
