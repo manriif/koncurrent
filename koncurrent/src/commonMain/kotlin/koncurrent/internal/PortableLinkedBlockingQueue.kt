@@ -19,6 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/*
+ * Ported from the LinkedBlockingQueue of JSR-166, which was written by Doug Lea with assistance
+ * from members of JCP JSR-166 Expert Group and released to the public domain, as explained at
+ * http://creativecommons.org/publicdomain/zero/1.0/
+ */
 package koncurrent.internal
 
 import kotlin.concurrent.atomics.AtomicInt

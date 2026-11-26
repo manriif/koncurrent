@@ -1,5 +1,6 @@
 [koncurrent_docs]: https://manriif.github.io/koncurrent/docs/
 [jsr166]: https://gee.cs.oswego.edu/dl/concurrency-interest/
+[jsr166_sources]: https://gee.cs.oswego.edu/dl/jsr166/src/main/java/util/concurrent/
 
 # Koncurrent
 
@@ -96,9 +97,9 @@ to move from `java.util.concurrent`, Stately or atomicfu.
   Java class is expected. The map and the stamped lock are the two exceptions,
   [on Android](docs/design.md#android).
 - **The same algorithms everywhere else.** The other targets get ports of the [JSR-166][jsr166]
-  sources that the JDK is made of. A lookup never blocks, and an update locks one bin of the
-  table. Only the two queues that never wait and the sorted map are built another way there,
-  which is faster without atomic fields.
+  sources of Doug Lea, which are in the public domain. A lookup never blocks, and an update
+  locks one bin of the table. Only the two queues that never wait and the sorted map are built
+  another way there, which is faster without atomic fields.
 - **The same behavior on every target.** The same tests run on the Java classes and on the
   ports. The ports are also checked for linearizability with
   [Lincheck](https://github.com/JetBrains/lincheck).
@@ -540,7 +541,18 @@ tests and its benchmarks.
 
 Koncurrent is licensed under the [MIT License](LICENSE).
 
-The map, the blocking queues, the locks, the conditions, the semaphore, the latch and the
-barrier are ports of the [JSR-166][jsr166] sources, written by Doug Lea with assistance from
-members of the JCP JSR-166 Expert Group, and released to the public domain under
-[CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+None of its code comes from OpenJDK, which is under the GPL.
+
+- **On the JVM and Android** Koncurrent uses the classes of the platform, through type
+  aliases. It holds no copy of them.
+- **The ports** come from the [JSR-166 sources][jsr166_sources], written by Doug Lea with
+  assistance from members of the JCP JSR-166 Expert Group, and released to the public domain
+  under [CC0](https://creativecommons.org/publicdomain/zero/1.0/). Each of those files says so
+  in its header, and each port names the class that it comes from in its own. They are the
+  map, the blocking queues, the locks, the conditions, the semaphore, the latch and the
+  barrier, ported from the files of November 2026.
+- **The rest is written for this library.** That includes `CopyOnWriteArrayList`, whose JSR-166
+  file carries a Sun copyright, `Thread`, `ThreadLocal`, the queues that never wait and the
+  sorted map.
+
+The MIT License covers the library. The JSR-166 originals stay in the public domain.
